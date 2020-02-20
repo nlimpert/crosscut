@@ -1,13 +1,13 @@
-# Copyright (C) 2019 MASCOR Institute. All rights reserved.
+# Copyright (C) 2019-2020 MASCOR Institute. All rights reserved.
 
 """
 The rosin.Didactic extension of Sphinx provides several text roles and
 directives that are missing in the vanilla version but required or at least
-useful for teaching ROS-I. This extension requires rosin.Meta to work properly.
+useful for teaching ROS-I.
 
 Example:
 ```
-:strike:`this text will be stiked through`
+While this text is shown normal, :strike:`this text will be crossed out`.
 
 .. task:: An admonition for highlighting tasks.
 
@@ -29,8 +29,8 @@ Example:
 """
 
 __author__ = "Marcus Meeßen"
-__copyright__ = "Copyright (C) 2019 MASCOR Institute"
-__version__ = "1.0"
+__copyright__ = "Copyright (C) 2019-2020 MASCOR Institute"
+__version__ = "1.1"
 
 import re
 from typing import List, Set
@@ -232,23 +232,17 @@ def generate_expression(topic: str, directive: str, original: str) -> str:
     return ' or '.join(selectors)
 
 
-def process_selectors(_app, _doc_name, source: List[str]) -> None:
+def process_selectors(_app, doc_name, source: List[str]) -> None:
     if not len(source) > 0:
         raise ExtensionError("Could not process an empty source list.")
 
-    meta = re.match(r'^\.\. meta::\n[ ]{3}:topic: ([\w\-]+)', source[0])
-
-    if not meta:
-        return  # file is not compatible with selectors
-
     line_groups: List[str] = re.split(r'(\n{2,})', source[0])
-    topic: str = meta.group(1)
 
     for index, line_group in enumerate(line_groups):
         line_groups[index] = re.sub(
             r'^(([ ]*)\.\. (level|scenario):: )([\n\w\- ]+)',
             lambda x: '%s%s\n%s   :raw: %s' % (x.group(1),
-                                               generate_expression(topic,
+                                               generate_expression(doc_name,
                                                                    x.group(3),
                                                                    x.group(4)),
                                                x.group(2),
