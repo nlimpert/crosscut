@@ -14,26 +14,28 @@ While this text is shown normal, :strike:`this text will be crossed out`.
 .. internal:: An internal note that should be visible for the instructor or
    author only.
 
-.. level:: beginner intermediate advanced
+.. level:: { beginner | intermediate | advanced | ... }
 
    This text is only visible if one of the above levels or "all" is included in
-   the configured tags. For example, "topic_level_beginner" or "topic_level_all"
-   have to be added to the "tags" object.
+   the configured tags. For example, "<filename>_level_intermediate" or
+   "<filename>_level_all" have to be added to the "tags" object. Define allowed
+   keywords in the `LEVELS` constant.
 
-.. scenario:: turtle_bot_3 python
+.. scenario:: { turtle_bot_3 | python | ... }
 
    This text is only visible if one of the above scenarios or "all" is included
-   in the configured tags. For example, "topic_scenario_turtle_bot_3" or
-   "topic_scenario_all" have to be added to the "tags" object.
+   in the configured tags. For example, "<filename>_scenario_turtle_bot_3" or
+   "<filename>_scenario_all" have to be added to the "tags" object. Define
+   allowed keywords in the `SCENARIOS` constant.
 ```
 """
 
 __author__ = "Marcus Meeßen"
 __copyright__ = "Copyright (C) 2019-2020 MASCOR Institute"
-__version__ = "1.1"
+__version__ = "1.2"
 
 import re
-from typing import List, Set
+from typing import Dict, List, Set
 
 from docutils import nodes
 from docutils.nodes import Admonition, Element, General, Inline, Node, \
@@ -125,6 +127,13 @@ class Internal(BaseAdmonition):
         return super().run() if Internal.enabled is True else []
 
 
+LEVELS: Dict[str, str] = {
+    'beginner': "Beginner",
+    'intermediate': "Intermediate",
+    'advanced': "Advanced",
+}
+
+
 # noinspection PyPep8Naming
 class level(General, Element):
     def __init__(self, *args, **kwargs) -> None:
@@ -136,7 +145,7 @@ class level(General, Element):
 def visit_level_html(self: HTMLTranslator, node: level) -> None:
     self.body.append(
         '<div class="level"><div><div class="level-badges">%s</div><div>'
-        % ''.join(['<span class="level-label">%s</span>' % label
+        % ''.join(['<span class="level-label">%s</span>' % LEVELS[label]
                    for label in node.levels])
     )
     self.set_first_last(node)
@@ -160,9 +169,29 @@ class Level(Only):
     def run(self) -> List[Node]:
         only = super().run()[0]
         node = level()
-        node.levels = self.options['raw']
+        node.levels = list(option.replace("-", "_")
+                           for option in self.options['raw'])
         only.children, node.children = node, only.children
         return [only]
+
+
+SCENARIOS: Dict[str, str] = {
+    # operating systems
+    'linux': "Linux",
+    'windows': "Windows",
+    'mac_os': "MacOS",
+    # programming languages
+    'cpp': "C++",
+    'python': "Python",
+    # robot platforms
+    'kuka_you_bot': "KUKA YouBot",
+    'turtle_bot_3': "TurtleBot3",
+    'turtle_sim': "TurtleSim",
+    'universal_robots_ur': "Universal Robots UR Series",
+    'universal_robots_ur3': "Universal Robots UR5",
+    'universal_robots_ur5': "Universal Robots UR5",
+    'yaskawa_sia10f': "YASKAWA SIA10F",
+}
 
 
 # noinspection PyPep8Naming
@@ -176,7 +205,7 @@ class scenario(General, Element):
 def visit_scenario_html(self: HTMLTranslator, node: scenario) -> None:
     self.body.append(
         '<div class="scenario"><div><div class="scenario-badges">%s</div><div>'
-        % ''.join(['<span class="scenario-label">%s</span>' % label
+        % ''.join(['<span class="scenario-label">%s</span>' % SCENARIOS[label]
                    for label in node.scenarios])
     )
     self.set_first_last(node)
@@ -200,7 +229,8 @@ class Scenario(Only):
     def run(self) -> List[Node]:
         only = super().run()[0]
         node = scenario()
-        node.scenarios = self.options['raw']
+        node.scenarios = list(option.replace("-", "_")
+                              for option in self.options['raw'])
         only.children, node.children = node, only.children
         return [only]
 
@@ -212,15 +242,17 @@ def generate_expression(topic: str, directive: str, original: str) -> str:
         raise ExtensionError("Invalid keyword '%s' in %s expression."
                              % (invalid_keywords.group(1), directive))
 
-    selectors: List[str] = re.split(r'[ \n]+', original)
+    selectors: List[str] = original.split()
 
-    if directive == 'level':
-        valid_levels: List[str] = ['beginner', 'intermediate', 'advanced']
+    valid_keywords: List[str] = {
+        'level': list(LEVELS.keys()),
+        'scenario': list(SCENARIOS.keys()),
+    }[directive]
 
-        if not all(selector in valid_levels for selector in selectors):
-            raise ExtensionError("Invalid expression '%s' in level directive, "
-                                 "allowed specifiers are %s."
-                                 % (original, valid_levels))
+    if not all(selector in valid_keywords for selector in selectors):
+        raise ExtensionError("Invalid expression '%s' in level directive, "
+                             "allowed specifiers are %s."
+                             % (original, valid_keywords))
 
     selectors += ['all']
 
