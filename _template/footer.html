@@ -1,0 +1,53 @@
+{% extends "!footer.html" %}
+{% block extrafooter %}
+    <div style="display: grid;
+                font-size: 8pt;
+                grid-column-gap: 2%;
+                grid-template-columns:23% 24% 24% 23%;
+                line-height: 10pt;">
+        <svg style="align-self: flex-end;
+                    grid-column: 1;
+                    grid-row: 1;
+                    max-height: 35pt !important;"
+             viewBox="0 0 80 40" width="100%">
+            <title>CC BY-NC-ND</title>
+            <a href="https://ros-i.school/">
+                <text x="0" y="10" fill="#00b1ac">School</text>
+            </a>
+            <text x="32.5" y="10">&vert;</text>
+            <a href="https://ros-i.academy/">
+                <text x="36" y="10" fill="#00b1ac">Academy</text>
+            </a>
+            <image href="{{ pathto("_images/cc_by-nc-nd_eu.svg", 1) }}"
+                   x="0" y="12" width="80" height="28"></image>
+        </svg>
+        <img alt="MASCOR Logo"
+             src="{{ pathto("_images/mascor_left.svg", 1) }}"
+             style="align-self: flex-end;
+                    display: inline-block;
+                    grid-column: 2;
+                    grid-row: 1;
+                    max-height: 35pt !important;
+                    vertical-align: text-bottom;"/>
+        <img alt="ROSIN Logo"
+             src="{{ pathto("_images/rosin.svg", 1) }}"
+             style="align-self: flex-end;
+                    display: inline-block;
+                    grid-column: 3;
+                    grid-row: 1;
+                    max-height: 35pt !important;
+                    vertical-align: text-bottom;"/>
+        <svg style="align-self: flex-end;
+                    grid-column: 4;
+                    grid-row: 1;
+                    max-height: 35pt !important;"
+             viewBox="0 0 122 40" width="100%">
+            <title>Flag of the European Union</title>
+            <image href="{{ pathto("_images/european_union.svg", 1) }}"
+                   y="5" width="45" height="30"></image>
+            <text x="47" y="17.666">H2020 funded</text>
+            <text x="47" y="30.666">GA no.&thinsp;732287</text>
+        </svg>
+    </div>
+    {{ super() }}
+{% endblock %}
