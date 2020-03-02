@@ -26,20 +26,20 @@ While this text is shown normal, :strike:`this text will be crossed out`.
    This text is only visible if one of the above levels or "all" is included in
    the configured tags. For example, "<filename>_level_intermediate" or
    "<filename>_level_all" have to be added to the "tags" object. Define allowed
-   keywords in the `LEVELS` constant.
+   keywords with the `didactic_levels` option.
 
 .. scenario:: { turtle_bot_3 | python | ... }
 
    This text is only visible if one of the above scenarios or "all" is included
    in the configured tags. For example, "<filename>_scenario_turtle_bot_3" or
    "<filename>_scenario_all" have to be added to the "tags" object. Define
-   allowed keywords in the `SCENARIOS` constant.
+   allowed keywords with the `didactic_scenarios` option.
 ```
 """
 
 __author__ = "Marcus Meeßen"
 __copyright__ = "Copyright (C) 2019-2020 MASCOR Institute"
-__version__ = "1.3"
+__version__ = "1.4"
 
 import re
 from typing import Dict, List, Set, Tuple, Type
@@ -49,6 +49,7 @@ from docutils.nodes import Admonition, Element, General, Inline, Node, \
 from docutils.parsers.rst import Directive, directives
 from docutils.parsers.rst.directives.admonitions import BaseAdmonition
 from sphinx.application import Sphinx
+from sphinx.config import Config
 from sphinx.directives import Only
 from sphinx.domains import Domain
 from sphinx.errors import ExtensionError
@@ -211,13 +212,6 @@ class RoleDomain(Domain):
         pass
 
 
-LEVELS: Dict[str, str] = {
-    'beginner': "Beginner",
-    'intermediate': "Intermediate",
-    'advanced': "Advanced",
-}
-
-
 # noinspection PyPep8Naming
 class level(General, Element):
     def __init__(self, *args, **kwargs) -> None:
@@ -229,7 +223,8 @@ class level(General, Element):
 def visit_level_html(self: HTMLTranslator, node: level) -> None:
     self.body.append(
         '<div class="level"><div><div class="level-badges">%s</div><div>'
-        % ''.join(['<span class="level-label">%s</span>' % LEVELS[label]
+        % ''.join(['<span class="level-label">%s</span>'
+                   % Level.levels[label]
                    for label in node.levels])
     )
     self.set_first_last(node)
@@ -249,6 +244,7 @@ def depart_level_latex(_self, _node) -> None:
 
 class Level(Only):
     option_spec = {'raw': directives.class_option}
+    levels: Dict[str, str]
 
     def run(self) -> List[Node]:
         only = super().run()[0]
@@ -257,25 +253,6 @@ class Level(Only):
                            for option in self.options['raw'])
         only.children, node.children = node, only.children
         return [only]
-
-
-SCENARIOS: Dict[str, str] = {
-    # operating systems
-    'linux': "Linux",
-    'windows': "Windows",
-    'mac_os': "MacOS",
-    # programming languages
-    'cpp': "C++",
-    'python': "Python",
-    # robot platforms
-    'kuka_you_bot': "KUKA YouBot",
-    'turtle_bot_3': "TurtleBot3",
-    'turtle_sim': "TurtleSim",
-    'universal_robots_ur': "Universal Robots UR Series",
-    'universal_robots_ur3': "Universal Robots UR5",
-    'universal_robots_ur5': "Universal Robots UR5",
-    'yaskawa_sia10f': "YASKAWA SIA10F",
-}
 
 
 # noinspection PyPep8Naming
@@ -289,7 +266,8 @@ class scenario(General, Element):
 def visit_scenario_html(self: HTMLTranslator, node: scenario) -> None:
     self.body.append(
         '<div class="scenario"><div><div class="scenario-badges">%s</div><div>'
-        % ''.join(['<span class="scenario-label">%s</span>' % SCENARIOS[label]
+        % ''.join(['<span class="scenario-label">%s</span>'
+                   % Scenario.scenarios[label]
                    for label in node.scenarios])
     )
     self.set_first_last(node)
@@ -309,6 +287,7 @@ def depart_scenario_latex(_self, _node) -> None:
 
 class Scenario(Only):
     option_spec = {'raw': directives.class_option}
+    scenarios: Dict[str, str]
 
     def run(self) -> List[Node]:
         only = super().run()[0]
@@ -319,7 +298,8 @@ class Scenario(Only):
         return [only]
 
 
-def generate_expression(topic: str, directive: str, original: str) -> str:
+def generate_expression(app: Sphinx, doc_name: str, directive: str,
+                        original: str) -> str:
     invalid_keywords = re.search(r'(all|not|and|or|is|True|False|None)',
                                  original)
     if invalid_keywords is not None:
@@ -329,26 +309,26 @@ def generate_expression(topic: str, directive: str, original: str) -> str:
     selectors: List[str] = original.split()
 
     valid_keywords: List[str] = {
-        'level': list(LEVELS.keys()),
-        'scenario': list(SCENARIOS.keys()),
+        'level': list(Level.levels.keys()),
+        'scenario': list(Scenario.scenarios.keys()),
     }[directive]
 
     if not all(selector in valid_keywords for selector in selectors):
-        raise ExtensionError("Invalid expression '%s' in level directive, "
+        raise ExtensionError("Invalid expression '%s' in %s directive, "
                              "allowed specifiers are %s."
-                             % (original, valid_keywords))
+                             % (original, directive, valid_keywords))
 
     selectors += ['all']
 
     for index, selector in enumerate(selectors):
-        selectors[index] = '%s_%s_%s or all_%s_%s' \
-                           % (topic, directive, selector,
-                              directive, selector)
+        selectors[index] = ('%s_%s_%s or %s_%s_%s' %
+                            (app.config.hex_hash(doc_name), directive, selector,
+                             app.config.hex_hash('all'), directive, selector))
 
     return ' or '.join(selectors)
 
 
-def process_selectors(_app, doc_name, source: List[str]) -> None:
+def process_selectors(app: Sphinx, doc_name, source: List[str]) -> None:
     if not len(source) > 0:
         raise ExtensionError("Could not process an empty source list.")
 
@@ -358,7 +338,8 @@ def process_selectors(_app, doc_name, source: List[str]) -> None:
         line_groups[index] = re.sub(
             r'^(([ ]*)\.\. (level|scenario):: )([\n\w\- ]+)',
             lambda x: '%s%s\n%s   :raw: %s' % (x.group(1),
-                                               generate_expression(doc_name,
+                                               generate_expression(app,
+                                                                   doc_name,
                                                                    x.group(3),
                                                                    x.group(4)),
                                                x.group(2),
@@ -368,7 +349,17 @@ def process_selectors(_app, doc_name, source: List[str]) -> None:
     source[0] = str().join(line_groups)
 
 
-def setup(app: Sphinx):
+def config_inited(_app, config: Config) -> None:
+    Level.levels = config['didactic_levels']
+    Scenario.scenarios = config['didactic_scenarios']
+
+
+def setup(app: Sphinx) -> None:
+    if 'hex_hash' not in app.config:
+        app.add_config_value('hex_hash', None, 'env')
+    app.add_config_value('didactic_levels', {}, 'env')
+    app.add_config_value('didactic_scenarios', {}, 'env')
+
     if 'author' in app.tags:
         Author.enabled = True
     if 'teacher' in app.tags:
@@ -408,3 +399,4 @@ def setup(app: Sphinx):
     app.add_directive('level', Level)
     app.add_directive('scenario', Scenario)
     app.connect('source-read', process_selectors)
+    app.connect('config-inited', config_inited)

@@ -161,3 +161,27 @@ tags.add('contributors')
 raw_enabled = True
 show_authors = True
 keep_warnings = True  # used for debugging
+
+# Options for rosin.Didactic
+didactic_levels = {
+    'beginner': "Beginner",
+    'intermediate': "Intermediate",
+    'advanced': "Advanced",
+}
+didactic_scenarios = {
+    # operating systems
+    'linux': "Linux",
+    'windows': "Windows",
+    'mac_os': "MacOS",
+    # programming languages
+    'cpp': "C++",
+    'python': "Python",
+    # robot platforms
+    'kuka_you_bot': "KUKA YouBot",
+    'turtle_bot_3': "TurtleBot3",
+    'turtle_sim': "TurtleSim",
+    'universal_robots_ur': "Universal Robots UR Series",
+    'universal_robots_ur3': "Universal Robots UR3",
+    'universal_robots_ur5': "Universal Robots UR5",
+    'yaskawa_sia10f': "YASKAWA SIA10F",
+}
