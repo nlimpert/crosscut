@@ -8,8 +8,7 @@ __version__ = "1.1"
 
 import argparse
 import os
-import re
-from typing import Any, Dict, Iterable, List
+from typing import Any, Callable, Dict, Iterable, List, Union
 
 import yaml
 from sphinx.util.tags import Tags
@@ -53,6 +52,8 @@ FORBIDDEN_COMPONENT_NAMES: List[str] = [
     DEFAULT,
     *EDITION_CHOICES,
 ]
+
+hex_hash: Union[Callable[[str], str], None] = None
 
 
 class ArgumentError(Exception):
@@ -311,6 +312,11 @@ class Parse(object):
 
 class Build(object):
     @staticmethod
+    def flatten(file_name: str) -> str:
+        import re
+        return re.sub(r'\W+', '_', file_name)
+
+    @staticmethod
     def generate_main_index(file_name: str) -> None:
         rst_file_name: str = os.path.join(Arguments.root, 'index.rst')
 
@@ -339,6 +345,18 @@ class Build(object):
                 '   :hidden:',
                 '',
                 '   general_glossary',
+                '',
+                '*' * 80,
+                'Essential Material',
+                '*' * 80,
+                '',
+                '.. toc''tree_required::',
+                '',
+                '*' * 80,
+                'Additional Material',
+                '*' * 80,
+                '',
+                '.. toc''tree_mentioned::',
             ]])
 
     @staticmethod
@@ -348,7 +366,7 @@ class Build(object):
                                              )
 
         rst_file_name: str = os.path.join(Arguments.indices, '%s.rst'
-                                          % re.sub(r'\W+', '_', file_name))
+                                          % file_name)
 
         with open(rst_file_name, 'w+') as file:
             components: List[str] = []
@@ -364,9 +382,10 @@ class Build(object):
                 # generated indices from .yaml files share the same directory
                 elif os.path.exists(os.path.join(Arguments.root,
                                                  '%s.yaml' % component)):
-                    components.append(re.sub(r'\W+', '_', component))
+                    flat_component: str = Build.flatten(component)
+                    components.append(flat_component)
                     # build .rst files for subordinate .yaml files recursively
-                    Build.generate_indices(item[SELF], component)
+                    Build.generate_indices(item[SELF], flat_component)
 
             file.writelines([line + '\n' for line in [
                 '.. meta::',  # prevents warnings
@@ -387,8 +406,8 @@ class Build(object):
                        inherited_default_scenarios: List[str] = None,
                        inherited_default_levels: List[str] = None,
                        inherited_default_lecturers: List[str] = None) -> str:
-        flags: str = ' -t T_%s' % re.sub(r'\W+', '_', os.path.join(
-            Arguments.indices, file_name))
+        flags: str = ' -t %s' % hex_hash(os.path.join(Arguments.indices,
+                                                      file_name))
 
         # inherit defaults if there are no own defaults set
         for default_key, inherited_default in [
@@ -416,7 +435,7 @@ class Build(object):
             if os.path.exists(os.path.join(Arguments.root,
                                            '%s.yaml' % component)):
                 flags += Build.generate_flags(
-                    item[SELF], component,
+                    item[SELF], Build.flatten(component),
                     inherited_default_scenarios=item[SCENARIOS],
                     inherited_default_levels=item[LEVELS],
                     inherited_default_lecturers=item[LECTURERS],
@@ -425,16 +444,15 @@ class Build(object):
             elif (component == ALL or
                   os.path.exists(os.path.join(Arguments.root,
                                               '%s.rst' % component))):
-                clean_component = re.sub(r'\W+', '_', component)
-                flags += ' -t T_%s' % clean_component
+                flags += ' -t %s' % hex_hash(component)
 
                 for key in [
                     SCENARIOS,
                     LEVELS,
                 ]:
                     for entry in item[key]:
-                        flags += (' -t T_%s_%s_%s'
-                                  % (clean_component, key, entry))
+                        flags += ' -t %s_%s_%s' % (hex_hash(component), key,
+                                                   entry)
 
         return flags
 
@@ -445,11 +463,12 @@ class Build(object):
             start=Arguments.root,
         )
         source_name: str = os.path.splitext(Arguments.source)[0]
-        Build.generate_main_index(
-            os.path.join(indices_directory, re.sub(r'\W+', '_', source_name)))
-        Build.generate_indices(config, source_name)
-        flags: str = Build.generate_flags(config, source_name)
-        flags += ' -t T_index'  # the main doc must be available
+        flat_source_name: str = Build.flatten(source_name)
+        Build.generate_main_index(os.path.join(indices_directory,
+                                               flat_source_name))
+        Build.generate_indices(config, flat_source_name)
+        flags: str = Build.generate_flags(config, flat_source_name)
+        flags += ' -t %s' % hex_hash('index')  # main doc must be available
 
         for edition in Arguments.editions:
             for part in edition.split('+'):
@@ -476,6 +495,8 @@ def main():
                           + [ALL, DEFAULT])
     Consistency.scenarios = (list(local['didactic_scenarios'].keys())
                              + [ALL, DEFAULT])
+    global hex_hash
+    hex_hash = local['hex_hash']
 
     Build.generate_build(Parse.load_configuration(Arguments.source))
 
