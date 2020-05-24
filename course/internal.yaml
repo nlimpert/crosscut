@@ -1,0 +1,7 @@
+title: Everything for Lecturers
+default_scenarios: [all]
+default_levels: [all]
+default_lecturers: []
+courses:
+  all: {}
+  internal: {}

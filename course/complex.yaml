@@ -1,0 +1,15 @@
+title: Complex Example
+default_scenarios: [tb3]
+default_levels: [beginner]
+default_lecturers: [John Doe]
+courses:
+  linux_filesystem_navigation: {
+    levels: [default, intermediate], # will evaluate to [beginner, intermediate]
+    scenarios: [ubuntu],
+    lecturers: [Jane Doe]
+  }
+  ros_filesystem_navigation: {} # will use all the default values
+  ros_topics: {
+    scenarios: [all], # output pages will not be filtered by any scenario
+    levels: [intermediate, advanced]
+  }
