@@ -1,0 +1,74 @@
+span.gui-button,
+span.gui-checkbox,
+span.gui-dropdown,
+span.gui-radio,
+span.gui-text,
+span.gui-textbox {
+    background: #e7f7f7;
+    display: inline-block;
+    font-family: monospace;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 15px !important;
+    margin: 0 3px;
+    max-height: 21px !important;
+    min-height: 21px !important;
+    white-space: nowrap;
+}
+
+span.gui-button,
+span.gui-dropdown,
+span.gui-textbox {
+    padding: 1px 3px;
+}
+
+span.gui-checkbox,
+span.gui-radio,
+span.gui-text {
+    padding: 2px 3px;
+}
+
+span.gui-button,
+span.gui-dropdown {
+    border: 2px outset #77b7e7;
+}
+
+span.gui-button {
+    border-radius: 4px;
+}
+
+span.gui-textbox {
+    border: 2px inset #77b7e7;
+}
+
+span.gui-checkbox,
+span.gui-radio,
+span.gui-text {
+    border: 1px dotted #77b7e7;
+}
+
+span.gui-checkbox > img,
+span.gui-radio > img,
+span.gui-dropdown > img {
+    height: 15px !important;
+    margin: 0 2px;
+    vertical-align: top;
+}
+
+span.gui-dropdown > img {
+    vertical-align: text-bottom;
+}
+
+span.gui-textbox > span {
+    animation: 1s blink step-end infinite;
+    display: inline-block;
+}
+
+@keyframes blink {
+    from, to {
+        color: transparent;
+    }
+    50% {
+        color: black;
+    }
+}
