@@ -96,7 +96,7 @@ class ROSComponent(object):
 
     def __call__(self, _name, raw_text: str, text: str,
                  *args, **kwargs) -> Tuple[List[Node], List[Node]]:
-        texts: List[str] = text.split(' ')
+        texts: List[str] = re.split('[ \n]+', text)
         parts_without_suffixes: List[str] = [part.split('-')[0]
                                              for part in self.parts]
 
@@ -137,11 +137,11 @@ class ROSComponent(object):
 class ROSDomain(Domain):
     name: str = 'ros'
     label: str = "Robot Operating System"
-    release_uri: str = 'http://docs.ros.org/melodic/api/'
+    release_uri: str = 'https://docs.ros.org/melodic/api/'
     roles: Dict[str, ROSComponent] = {
         'package': ROSComponent(
             parts=['package'],
-            uri='http://wiki.ros.org/%(package)s',
+            uri='https://wiki.ros.org/%(package)s',
             classes=['ros-package']
         ),
         'package-i': ROSComponent(
@@ -245,9 +245,9 @@ def process_comm(_app, _doc_name, source: List[str]) -> None:
         raise ExtensionError("Could not process an empty source list.")
 
     source[0] = re.sub(
-        r':ros:(%s):`([a-z_ ]+)`' % '|'.join(ROSDomain.roles.keys()),
+        r':ros:(%s):`([a-zA-Z_ \n]+)`' % '|'.join(ROSDomain.roles.keys()),
         lambda x: '/'.join(divide_parts(ROSDomain.roles[x.group(1)].parts,
-                                        x.group(2).split(' '))),
+                                        re.split('[ \n]+', x.group(2)))),
         source[0]
     )
 
