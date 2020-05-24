@@ -14,9 +14,10 @@ Contents
 
 .. todolist::
 
-.. General purpose chapters
 .. toctree::
    :maxdepth: 1
+
+   glossary
 
 
 ********************************************************************************
