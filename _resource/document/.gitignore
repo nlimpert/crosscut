@@ -1,0 +1,11 @@
+*
+!*/
+!.git*
+
+!*.doc[mx]
+!*.od[pst]
+!*.pdf
+!*.ppt[mx]
+!*.tex
+!*.txt
+!*.xls[mx]

@@ -1,0 +1,10 @@
+*
+!*/
+!.git*
+
+!*.gif
+!*.ico
+!*.jpg
+!*.png
+!*.svg
+!*.webp

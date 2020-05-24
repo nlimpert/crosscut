@@ -1,0 +1,12 @@
+*
+!*/
+!.gitignore
+
+!.editorconfig
+!conf.py
+!Makefile
+
+!*.md
+!*.rst
+
+build/
