@@ -105,7 +105,8 @@ def check_config_level_list(parent: str, artifact: List[str]) -> None:
 
 def parse_configuration(file_name: str) -> dict:
     with open(file_name, 'r') as file:
-        config = yaml.load(file, Loader=yaml.FullLoader)
+        config = yaml.load(file,
+                           Loader=getattr(yaml, "FullLoader", yaml.Loader))
 
         # all required keys must be present
         check_config_key_list('root', config.keys(),
