@@ -177,7 +177,7 @@ def generate_build(config: dict) -> str:
 def main():
     arguments = parse_arguments()
     configuration = parse_configuration(arguments.course)
-    os.system('make %s BUILDDIR="%s" SPHINXOPTS="%s"'
+    os.system('make %s BUILD_DIR="%s" SPHINX_OPTS="%s"'
               % (arguments.format,
                  arguments.output,
                  generate_build(configuration)))
