@@ -1,0 +1,73 @@
+code.ros {
+    background: lightyellow;
+}
+
+code.ros-package > span.pre,
+code.ros-package-i > span.pre {
+    color: darkgreen;
+}
+
+code.ros-node > span.pre,
+code.ros-node-i > span.pre {
+    color: royalblue;
+}
+
+code.ros-topic > span.pre,
+code.ros-topic-i > span.pre {
+    color: purple;
+}
+
+code.ros-message > span.pre,
+code.ros-message-i > span.pre,
+code.ros-service > span.pre,
+code.ros-service-i > span.pre,
+code.ros-action > span.pre,
+code.ros-action-i > span.pre {
+    color: orangered;
+}
+
+code.ros-parameter > span.pre,
+code.ros-parameter-i > span.pre {
+    color: darkslategray;
+}
+
+code.ros-package-i > span.pre:after,
+code.ros-node-i > span.pre:after,
+code.ros-topic-i > span.pre:after,
+code.ros-message > span.pre:after,
+code.ros-message-i > span.pre:after,
+code.ros-service > span.pre:after,
+code.ros-service-i > span.pre:after,
+code.ros-action > span.pre:after,
+code.ros-action-i > span.pre:after,
+code.ros-parameter-i > span.pre:after {
+    content: 'i';
+    color: slategray;
+    font-size: x-small;
+    font-style: italic;
+    vertical-align: super;
+}
+
+code.ros-message > span.pre:after {
+    content: 'm';
+}
+
+code.ros-message-i > span.pre:after {
+    content: 'mi';
+}
+
+code.ros-service > span.pre:after {
+    content: 's';
+}
+
+code.ros-service-i > span.pre:after {
+    content: 'si';
+}
+
+code.ros-action > span.pre:after {
+    content: 'a';
+}
+
+code.ros-action-i > span.pre:after {
+    content: 'ai';
+}
