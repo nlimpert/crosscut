@@ -17,6 +17,7 @@ Contents
 .. toctree::
    :maxdepth: 1
 
+   contributors
    glossary
 
 
