@@ -2,10 +2,13 @@
 !*/
 !.git*
 
+!*.doc
 !*.doc[mx]
 !*.od[pst]
 !*.pdf
+!*.ppt
 !*.ppt[mx]
 !*.tex
 !*.txt
+!*.xls
 !*.xls[mx]
