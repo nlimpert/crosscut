@@ -1,0 +1,76 @@
+div.admonition.internal {
+    background: #ffb2dd;
+}
+
+div.admonition.internal > p.admonition-title {
+    background: #c94f7c;
+}
+
+div.admonition.task {
+    background: #e6ceff;
+}
+
+div.admonition.task > p.admonition-title {
+    background: #836fa9;
+}
+
+div.level,
+div.scenario {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+div.level > div,
+div.scenario > div {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+div.level-badges,
+div.scenario-badges {
+    text-align: right;
+    font-size: 0;
+    line-height: 0;
+}
+
+span.level-label,
+span.scenario-label {
+    border: 1px solid transparent;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 600;
+    line-height: 15px;
+    padding: 1px 3px;
+    margin: 0 3px;
+}
+
+span.level-label {
+    border-color: deeppink;
+    background: lightpink;
+}
+
+span.scenario-label {
+    border-color: deepskyblue;
+    background: lightskyblue;
+}
+
+div.level-bar,
+div.scenario-bar {
+    min-width: 0.5ex;
+    max-width: 0.5ex;
+    margin-bottom: 5px;
+}
+
+div.level-bar {
+    background: linear-gradient(
+            90deg, transparent 0%, deeppink 50%, transparent 100%
+    );
+}
+
+div.scenario-bar {
+    background: linear-gradient(
+            90deg, transparent 0%, deepskyblue 50%, transparent 100%
+    );
+}
