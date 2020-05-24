@@ -12,7 +12,11 @@ sys.path.append(os.path.abspath('%s%s_extension' % (os.curdir, os.sep)))
 extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.mathjax',
-    'sphinx.ext.todo'
+    'sphinx.ext.todo',
+    'rosin.didactic',
+    'rosin.gui',
+    'rosin.meta',
+    'rosin.ros_element'
 ]
 master_doc = 'index'
 templates_path = ['_template']
