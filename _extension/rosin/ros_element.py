@@ -43,18 +43,81 @@ Short variants:
 ´´´
 """
 
-__author__ = "Marcus Meeßen"
+__author__ = "Meeßen, Marcus"
 __copyright__ = "Copyright (C) 2019-2020 MASCOR Institute"
-__version__ = "1.1"
+__version__ = "1.2"
 
 import re
 from typing import Dict, List, Tuple
 
-from docutils.nodes import Inline, Node, TextElement, literal, reference
+from docutils.nodes import Inline, Node, TextElement, reference
 from sphinx.application import Sphinx
+from sphinx.config import Config
 from sphinx.domains import Domain
 from sphinx.errors import ExtensionError
 from sphinx.writers.html import HTMLTranslator
+from sphinx.writers.latex import LaTeXTranslator
+
+
+# noinspection PyPep8Naming
+class index_text(Inline, TextElement):
+    pass
+
+
+def visit_index_text_html(self: HTMLTranslator, node: index_text) -> None:
+    self.body.append('<span style="color: rgb(%d, %d, %d);">'
+                     % (*ROSDomain.index_color,))
+    self.visit_superscript(node)
+    self.visit_emphasis(node)
+
+
+def depart_index_text_html(self: HTMLTranslator, node: index_text) -> None:
+    self.depart_emphasis(node)
+    self.depart_superscript(node)
+    self.body.append('</span>')
+
+
+def visit_index_text_latex(self: LaTeXTranslator, node: index_text) -> None:
+    self.body.append('\\text''color[RGB]{%d,%d,%d}{'
+                     % (*ROSDomain.index_color,))
+    self.visit_superscript(node)
+    self.visit_emphasis(node)
+
+
+def depart_index_text_latex(self: LaTeXTranslator, node: index_text) -> None:
+    self.depart_emphasis(node)
+    self.depart_superscript(node)
+    self.body.append('}')
+
+
+# noinspection PyPep8Naming
+class literal_text(Inline, TextElement):
+    pass
+
+
+def visit_literal_text_html(self: HTMLTranslator, node: literal_text) -> None:
+    self.body.append('<code class="%s" style="background: rgb(%d, %d, %d);'
+                     ' color: rgb(%d, %d, %d);">'
+                     % (' '.join(node.attributes['classes']),
+                        *ROSDomain.box_color,
+                        *node.attributes['text_color']))
+
+
+def depart_literal_text_html(self: HTMLTranslator, _node) -> None:
+    self.body.append('</code>')
+
+
+def visit_literal_text_latex(self: LaTeXTranslator, node: literal_text) -> None:
+    self.body.append('\\color''box[RGB]{%d,%d,%d}{'
+                     '\\v''phantom{Ay}'
+                     '\\text''color[RGB]{%d,%d,%d}{'
+                     '\\sphinx''code{'
+                     % (*ROSDomain.box_color,
+                        *node.attributes['text_color']))
+
+
+def depart_literal_text_latex(self: LaTeXTranslator, _node) -> None:
+    self.body.append('}}}')
 
 
 # noinspection PyPep8Naming
@@ -81,10 +144,13 @@ def depart_titled_text_latex(_self, _node) -> None:
 
 class ROSComponent(object):
     def __init__(self, parts: List[str] = None, uri: str = None,
-                 classes: List[str] = None) -> None:
+                 classes: List[str] = None, index: str = None,
+                 text_color: Tuple[int, int, int] = (0, 0, 0)) -> None:
         self.parts: List[str] = parts if parts is not None else []
         self.uri: str = uri
         self.classes: List[str] = classes if classes is not None else []
+        self.index = index
+        self.text_color: Tuple[int, int, int] = text_color
 
     def __call__(self, _name, raw_text: str, text: str,
                  *args, **kwargs) -> Tuple[List[Node], List[Node]]:
@@ -97,11 +163,18 @@ class ROSComponent(object):
                                  "tokens. Expected %s, but got %s."
                                  % (parts_without_suffixes, texts))
 
-        literal_node = literal(
+        literal_node = literal_text(
             rawsource=raw_text,
+            text_color=self.text_color,
             text=texts[0],
-            classes=['xref', 'ros'] + self.classes,
+            classes=['xref', 'pre', 'ros'] + self.classes,
         )
+
+        if self.index is not None:
+            index_node = index_text(
+                text=self.index,
+            )
+            literal_node.append(index_node)
 
         titled_node = titled_text(
             title="ROS %s" % " from ".join(
@@ -128,6 +201,8 @@ class ROSDomain(Domain):
     name: str = 'ros'
     label: str = "Robot Operating System"
     release_uri: str = 'https://docs.ros.org/melodic/api/'
+    box_color: Tuple[int, int, int]
+    index_color: Tuple[int, int, int]
     roles: Dict[str, ROSComponent] = {
         'package': ROSComponent(
             parts=['package'],
@@ -137,6 +212,7 @@ class ROSDomain(Domain):
         'package-i': ROSComponent(
             parts=['package-i'],
             classes=['ros-package-i'],
+            index='i',
         ),
         'node': ROSComponent(
             parts=['node', 'package'],
@@ -145,33 +221,40 @@ class ROSDomain(Domain):
         'node-i': ROSComponent(
             parts=['node-i', 'package-i'],
             classes=['ros-node-i'],
+            index='i',
         ),
         'message': ROSComponent(
             parts=['message', 'package'],
             uri='%s%%(package)s/html/msg/%%(message)s.html' % release_uri,
             classes=['ros-message'],
+            index='m',
         ),
         'message-i': ROSComponent(
             parts=['message-i', 'package-i'],
             classes=['ros-message-i'],
+            index='mi',
         ),
         'service': ROSComponent(
             parts=['service', 'package'],
             uri='%s%%(package)s/html/srv/%%(service)s.html' % release_uri,
             classes=['ros-service'],
+            index='s',
         ),
         'service-i': ROSComponent(
             parts=['service-i', 'package-i'],
             classes=['ros-service-i'],
+            index='si',
         ),
         'action': ROSComponent(
             parts=['action', 'package'],
             uri='%s%%(package)s/html/action/%%(action)s.html' % release_uri,
             classes=['ros-action'],
+            index='a',
         ),
         'action-i': ROSComponent(
             parts=['action-i', 'package-i'],
             classes=['ros-action-i'],
+            index='ai',
         ),
         'topic': ROSComponent(
             parts=['topic'],
@@ -180,6 +263,7 @@ class ROSDomain(Domain):
         'topic-i': ROSComponent(
             parts=['topic-i'],
             classes=['ros-topic-i'],
+            index='i',
         ),
         'topic-np': ROSComponent(
             parts=['topic-np', 'node', 'package'],
@@ -188,6 +272,7 @@ class ROSDomain(Domain):
         'topic-inp': ROSComponent(
             parts=['topic-inp', 'node-i', 'package-i'],
             classes=['ros-topic-i'],
+            index='i',
         ),
         'parameter': ROSComponent(
             parts=['parameter'],
@@ -196,6 +281,7 @@ class ROSDomain(Domain):
         'parameter-i': ROSComponent(
             parts=['parameter-i'],
             classes=['ros-parameter-i'],
+            index='i',
         ),
         'parameter-np': ROSComponent(
             parts=['parameter-np', 'node', 'package'],
@@ -204,6 +290,7 @@ class ROSDomain(Domain):
         'parameter-inp': ROSComponent(
             parts=['parameter-inp', 'node-i', 'package-i'],
             classes=['ros-parameter-i'],
+            index='i',
         ),
     }
 
@@ -245,11 +332,49 @@ def process_comm(_app, _doc_name, source: List[str]) -> None:
     )
 
 
+def config_inited(_app, config: Config) -> None:
+    ROSDomain.box_color = config['ros_element_box_color']
+    ROSDomain.index_color = config['ros_element_index_color']
+
+    for key, roles in [
+        ('ros_element_package_color', ['package', 'package-i']),
+        ('ros_element_node_color', ['node', 'node-i']),
+        ('ros_element_message_color', ['message', 'message-i']),
+        ('ros_element_service_color', ['service', 'service-i']),
+        ('ros_element_action_color', ['action', 'action-i']),
+        ('ros_element_topic_color', ['topic', 'topic-i',
+                                     'topic-np', 'topic-inp']),
+        ('ros_element_parameter_color', ['parameter', 'parameter-i',
+                                         'parameter-np', 'parameter-inp']),
+    ]:
+        for role in roles:
+            ROSDomain.roles[role].text_color = config[key]
+
+
 def setup(app: Sphinx) -> None:
+    app.add_config_value('ros_element_index_color', (112, 128, 144), 'env')
+    app.add_config_value('ros_element_box_color', (255, 255, 224), 'env')
+    app.add_config_value('ros_element_package_color', (0, 100, 0), 'env')
+    app.add_config_value('ros_element_node_color', (65, 105, 225), 'env')
+    app.add_config_value('ros_element_message_color', (255, 69, 0), 'env')
+    app.add_config_value('ros_element_service_color', (255, 69, 0), 'env')
+    app.add_config_value('ros_element_action_color', (255, 69, 0), 'env')
+    app.add_config_value('ros_element_topic_color', (160, 32, 240), 'env')
+    app.add_config_value('ros_element_parameter_color', (47, 79, 79), 'env')
+
     app.add_domain(ROSDomain)
     app.add_stylesheet('style/ros_element.css')
+    app.add_node(index_text,
+                 html=(visit_index_text_html, depart_index_text_html),
+                 latex=(visit_index_text_latex, depart_index_text_latex),
+                 )
+    app.add_node(literal_text,
+                 html=(visit_literal_text_html, depart_literal_text_html),
+                 latex=(visit_literal_text_latex, depart_literal_text_latex),
+                 )
     app.add_node(titled_text,
                  html=(visit_titled_text_html, depart_titled_text_html),
                  latex=(visit_titled_text_latex, depart_titled_text_latex),
                  )
     app.connect('source-read', process_comm)
+    app.connect('config-inited', config_inited)
