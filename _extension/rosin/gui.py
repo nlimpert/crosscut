@@ -1,4 +1,4 @@
-# Copyright (C) 2019 MASCOR Institute. All rights reserved.
+# Copyright (C) 2019-2020 MASCOR Institute. All rights reserved.
 
 """
 The rosin.GUI extension of Sphinx offers several GUI elements that are missing
@@ -7,27 +7,31 @@ enable a faster understanding of the instructions.
 
 Example:
 ```
-:gui:label: or :gui:text: is the new version of the :guilabel:.
+:gui:label:`Some Label` or :gui:text:`Another Label` is the new version of the
+:guilabel:`Legacy Label`.
 
-:gui:button: shows a non-clickable button.
+:gui:button:`Typical Button` shows a non-clickable button.
 
-:gui:radio: or :gui:radio-selected: are the two available states that a radio
-button may have.
+:gui:radio:`Empty Circle` or :gui:radio-selected:`Filled Circle` are the two
+available states that a radio button may have.
 
-:gui:checkbox:, :gui:checkbox-selected:, and :gui:checkbox-intermediate: are
-the three available states that a checkbox may have.
+:gui:checkbox:`Empty Box`, :gui:checkbox-intermediate:`Filled Box`, and
+:gui:checkbox-selected:`Ticked Box` are the three available states that a
+checkbox may have.
 
-:gui:textbox: shows non-editable textbox with a fake blinking cursor.
+:gui:textbox:`Box With Text` shows a non-editable textbox with a fake blinking
+cursor.
 
-:gui:dropdown: is a non-interactive drop-down menu.
+:gui:dropdown:`Drop-Down Menu` is a non-interactive drop-down menu.
 ```
 """
 
-__author__ = "Marcus Meeßen"
-__copyright__ = "Copyright (C) 2019 MASCOR Institute"
+__author__ = "Meeßen, Marcus"
+__copyright__ = "Copyright (C) 2019-2020 MASCOR Institute"
 __version__ = "1.0"
 
 from typing import List, Dict, Tuple
+
 from docutils.nodes import Inline, Node, TextElement
 from docutils.parsers.rst import Directive
 from docutils.parsers.rst.roles import GenericRole
@@ -49,6 +53,14 @@ def depart_button_html(self: HTMLTranslator, _node) -> None:
     self.body.append('</span>')
 
 
+def visit_button_latex(_self, _node) -> None:
+    pass
+
+
+def depart_button_latex(_self, _node) -> None:
+    pass
+
+
 # noinspection PyPep8Naming
 class text(Inline, TextElement):
     pass
@@ -62,12 +74,21 @@ def depart_text_html(self: HTMLTranslator, _node) -> None:
     self.body.append('</span>')
 
 
+def visit_text_latex(_self, _node) -> None:
+    pass
+
+
+def depart_text_latex(_self, _node) -> None:
+    pass
+
+
 # noinspection PyPep8Naming
 class radio(Inline, TextElement):
     pass
 
 
 def visit_radio_html(self: HTMLTranslator, _node) -> None:
+    # noinspection SpellCheckingInspection
     self.body.append('<span class="gui-radio">'
                      '<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0c'
                      'DovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PS'
@@ -82,12 +103,21 @@ def depart_radio_html(self: HTMLTranslator, _node) -> None:
     self.body.append('</span>')
 
 
+def visit_radio_latex(_self, _node) -> None:
+    pass
+
+
+def depart_radio_latex(_self, _node) -> None:
+    pass
+
+
 # noinspection PyPep8Naming
 class radio_selected(Inline, TextElement):
     pass
 
 
 def visit_radio_selected_html(self: HTMLTranslator, _node) -> None:
+    # noinspection SpellCheckingInspection
     self.body.append('<span class="gui-radio">'
                      '<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0c'
                      'DovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PS'
@@ -103,12 +133,21 @@ def depart_radio_selected_html(self: HTMLTranslator, _node) -> None:
     self.body.append('</span>')
 
 
+def visit_radio_selected_latex(_self, _node) -> None:
+    pass
+
+
+def depart_radio_selected_latex(_self, _node) -> None:
+    pass
+
+
 # noinspection PyPep8Naming
 class checkbox(Inline, TextElement):
     pass
 
 
 def visit_checkbox_html(self: HTMLTranslator, _node) -> None:
+    # noinspection SpellCheckingInspection
     self.body.append('<span class="gui-checkbox">'
                      '<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0c'
                      'DovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PS'
@@ -123,12 +162,21 @@ def depart_checkbox_html(self: HTMLTranslator, _node) -> None:
     self.body.append('</span>')
 
 
+def visit_checkbox_latex(_self, _node) -> None:
+    pass
+
+
+def depart_checkbox_latex(_self, _node) -> None:
+    pass
+
+
 # noinspection PyPep8Naming
 class checkbox_selected(Inline, TextElement):
     pass
 
 
 def visit_checkbox_selected_html(self: HTMLTranslator, _node) -> None:
+    # noinspection SpellCheckingInspection
     self.body.append('<span class="gui-checkbox">'
                      '<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0c'
                      'DovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PS'
@@ -144,12 +192,21 @@ def depart_checkbox_selected_html(self: HTMLTranslator, _node) -> None:
     self.body.append('</span>')
 
 
+def visit_checkbox_selected_latex(_self, _node) -> None:
+    pass
+
+
+def depart_checkbox_selected_latex(_self, _node) -> None:
+    pass
+
+
 # noinspection PyPep8Naming
 class checkbox_indeterminate(Inline, TextElement):
     pass
 
 
 def visit_checkbox_indeterminate_html(self: HTMLTranslator, _node) -> None:
+    # noinspection SpellCheckingInspection
     self.body.append('<span class="gui-checkbox">'
                      '<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0c'
                      'DovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PS'
@@ -162,6 +219,14 @@ def visit_checkbox_indeterminate_html(self: HTMLTranslator, _node) -> None:
 
 def depart_checkbox_indeterminate_html(self: HTMLTranslator, _node) -> None:
     self.body.append('</span>')
+
+
+def visit_checkbox_indeterminate_latex(_self, _node) -> None:
+    pass
+
+
+def depart_checkbox_indeterminate_latex(_self, _node) -> None:
+    pass
 
 
 # noinspection PyPep8Naming
@@ -177,6 +242,14 @@ def depart_textbox_html(self: HTMLTranslator, _node) -> None:
     self.body.append('<span>&#x2758;</span></span>')
 
 
+def visit_textbox_latex(_self, _node) -> None:
+    pass
+
+
+def depart_textbox_latex(_self, _node) -> None:
+    pass
+
+
 # noinspection PyPep8Naming
 class dropdown(Inline, TextElement):
     pass
@@ -187,6 +260,7 @@ def visit_dropdown_html(self: HTMLTranslator, _node) -> None:
 
 
 def depart_dropdown_html(self: HTMLTranslator, _node) -> None:
+    # noinspection SpellCheckingInspection
     self.body.append('<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0c'
                      'DovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PS'
                      'IyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBvcGFjaXR5PSIuODc'
@@ -194,6 +268,14 @@ def depart_dropdown_html(self: HTMLTranslator, _node) -> None:
                      'ZD0iTTE2LjU5IDguNTlMMTIgMTMuMTcgNy40MSA4LjU5IDYgMTBsNiA2I'
                      'DYtNi0xLjQxLTEuNDF6Ii8+PC9zdmc+"/>'
                      '</span>')
+
+
+def visit_dropdown_latex(_self, _node) -> None:
+    pass
+
+
+def depart_dropdown_latex(_self, _node) -> None:
+    pass
 
 
 class GUIDomain(Domain):
@@ -223,26 +305,47 @@ class GUIDomain(Domain):
         pass
 
 
-def setup(app: Sphinx):
+def setup(app: Sphinx) -> None:
     app.add_domain(GUIDomain)
     app.add_stylesheet('style/gui.css')
     app.add_node(button,
-                 html=(visit_button_html, depart_button_html))
+                 html=(visit_button_html, depart_button_html),
+                 latex=(visit_button_latex, depart_button_latex),
+                 )
     app.add_node(text,
-                 html=(visit_text_html, depart_text_html))
+                 html=(visit_text_html, depart_text_html),
+                 latex=(visit_text_latex, depart_text_latex),
+                 )
     app.add_node(radio,
-                 html=(visit_radio_html, depart_radio_html))
+                 html=(visit_radio_html, depart_radio_html),
+                 latex=(visit_radio_latex, depart_radio_latex),
+                 )
     app.add_node(radio_selected,
-                 html=(visit_radio_selected_html, depart_radio_selected_html))
+                 html=(visit_radio_selected_html, depart_radio_selected_html),
+                 latex=(visit_radio_selected_latex,
+                        depart_radio_selected_latex),
+                 )
     app.add_node(checkbox,
-                 html=(visit_checkbox_html, depart_checkbox_html))
+                 html=(visit_checkbox_html, depart_checkbox_html),
+                 latex=(visit_checkbox_latex, depart_checkbox_latex),
+                 )
     app.add_node(checkbox_selected,
                  html=(visit_checkbox_selected_html,
-                       depart_checkbox_selected_html))
+                       depart_checkbox_selected_html),
+                 latex=(visit_checkbox_selected_latex,
+                        depart_checkbox_selected_latex),
+                 )
     app.add_node(checkbox_indeterminate,
                  html=(visit_checkbox_indeterminate_html,
-                       depart_checkbox_indeterminate_html))
+                       depart_checkbox_indeterminate_html),
+                 latex=(visit_checkbox_indeterminate_latex,
+                        depart_checkbox_indeterminate_latex),
+                 )
     app.add_node(textbox,
-                 html=(visit_textbox_html, depart_textbox_html))
+                 html=(visit_textbox_html, depart_textbox_html),
+                 latex=(visit_textbox_latex, depart_textbox_latex),
+                 )
     app.add_node(dropdown,
-                 html=(visit_dropdown_html, depart_dropdown_html))
+                 html=(visit_dropdown_html, depart_dropdown_html),
+                 latex=(visit_dropdown_latex, depart_dropdown_latex),
+                 )
