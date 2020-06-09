@@ -37,9 +37,9 @@ While this text is shown normal, :strike:`this text will be crossed out`.
 ```
 """
 
-__author__ = "Marcus Meeßen"
+__author__ = "Meeßen, Marcus"
 __copyright__ = "Copyright (C) 2019-2020 MASCOR Institute"
-__version__ = "1.4"
+__version__ = "1.5"
 
 import re
 from typing import Dict, List, Set, Tuple, Type
@@ -54,6 +54,7 @@ from sphinx.directives import Only
 from sphinx.domains import Domain
 from sphinx.errors import ExtensionError
 from sphinx.writers.html import HTMLTranslator
+from sphinx.writers.latex import LaTeXTranslator
 
 
 # noinspection PyPep8Naming
@@ -69,12 +70,12 @@ def depart_strike_html(self: HTMLTranslator, _node) -> None:
     self.body.append('</s>')
 
 
-def visit_strike_latex(_self, _node) -> None:
-    pass
+def visit_strike_latex(self: LaTeXTranslator, _node) -> None:
+    self.body.append('\\s''out{')
 
 
-def depart_strike_latex(_self, _node) -> None:
-    pass
+def depart_strike_latex(self: LaTeXTranslator, _node) -> None:
+    self.body.append('}')
 
 
 # noinspection PyPep8Naming
@@ -92,12 +93,12 @@ def depart_task_html(self: HTMLTranslator, _node) -> None:
     self.body.append('</div>')
 
 
-def visit_task_latex(_self, _node) -> None:
-    pass
+def visit_task_latex(self: LaTeXTranslator, _node) -> None:
+    self.body.append('\n\\begin{sphinx''admonition}{note}{Task:}')
 
 
-def depart_task_latex(_self, _node) -> None:
-    pass
+def depart_task_latex(self: LaTeXTranslator, _node) -> None:
+    self.body.append('\\end{sphinx''admonition}\n')
 
 
 class Task(BaseAdmonition):
@@ -122,16 +123,16 @@ def depart_role_html():
     return func
 
 
-def visit_role_latex():
-    def func(_self, _node) -> None:
-        pass
+def visit_role_latex(heading: str):
+    def func(self: LaTeXTranslator, _node) -> None:
+        self.body.append('\n\\begin{sphinx''admonition}{note}{%s:}' % heading)
 
     return func
 
 
 def depart_role_latex():
-    def func(_self, _node) -> None:
-        pass
+    def func(self: LaTeXTranslator, _node) -> None:
+        self.body.append('\\end{sphinx''admonition}\n')
 
     return func
 
@@ -234,12 +235,14 @@ def depart_level_html(self: HTMLTranslator, _node) -> None:
     self.body.append('</div></div><div class="level-bar"></div></div>')
 
 
-def visit_level_latex(_self, _node) -> None:
-    pass
+def visit_level_latex(self: LaTeXTranslator, node: level) -> None:
+    self.body.append('\\begin{left''bar}{\\sl\\tiny %s\\par}'
+                     % ', '.join(['%s' % Level.levels[label]
+                                  for label in node.attributes['levels']]))
 
 
-def depart_level_latex(_self, _node) -> None:
-    pass
+def depart_level_latex(self: LaTeXTranslator, _node) -> None:
+    self.body.append('\\end{left''bar}')
 
 
 class Level(Only):
@@ -277,12 +280,14 @@ def depart_scenario_html(self: HTMLTranslator, _node) -> None:
     self.body.append('</div></div><div class="scenario-bar"></div></div>')
 
 
-def visit_scenario_latex(_self, _node) -> None:
-    pass
+def visit_scenario_latex(self: LaTeXTranslator, node: scenario) -> None:
+    self.body.append('\\begin{left''bar}{\\sl\\tiny %s\\par}'
+                     % ', '.join(['%s' % Scenario.scenarios[label]
+                                  for label in node.attributes['scenarios']]))
 
 
-def depart_scenario_latex(_self, _node) -> None:
-    pass
+def depart_scenario_latex(self: LaTeXTranslator, _node) -> None:
+    self.body.append('\\end{left''bar}')
 
 
 class Scenario(Only):
@@ -368,32 +373,40 @@ def setup(app: Sphinx) -> None:
         Tutor.enabled = True
 
     app.add_stylesheet('style/didactic.css')
+    app.add_latex_package('ul''em')
     app.add_domain(RoleDomain)
     app.add_node(strike,
                  html=(visit_strike_html, depart_strike_html),
-                 latex=(visit_strike_latex, depart_strike_latex))
+                 latex=(visit_strike_latex, depart_strike_latex),
+                 )
     app.add_node(task,
                  html=(visit_task_html, depart_task_html),
-                 latex=(visit_task_latex, depart_task_latex))
+                 latex=(visit_task_latex, depart_task_latex),
+                 )
     app.add_node(role_tutor,
                  html=(visit_role_html(role_tutor, "Tutor Note"),
                        depart_role_html()),
-                 latex=(visit_role_latex(), depart_role_latex()))
+                 latex=(visit_role_latex("Tutor Note"), depart_role_latex()),
+                 )
     app.add_node(role_author,
                  html=(visit_role_html(role_author, "Author Note"),
                        depart_role_html()),
-                 latex=(visit_role_latex(), depart_role_latex()))
+                 latex=(visit_role_latex("Author Note"), depart_role_latex()),
+                 )
     app.add_node(role_teacher,
                  html=(visit_role_html(role_teacher, "Teacher Note"),
                        depart_role_html()),
-                 latex=(visit_role_latex(), depart_role_latex()))
+                 latex=(visit_role_latex("Teacher Note"), depart_role_latex()),
+                 )
     app.add_node(role_mixed)
     app.add_node(level,
                  html=(visit_level_html, depart_level_html),
-                 latex=(visit_level_latex, depart_level_latex))
+                 latex=(visit_level_latex, depart_level_latex),
+                 )
     app.add_node(scenario,
                  html=(visit_scenario_html, depart_scenario_html),
-                 latex=(visit_scenario_latex, depart_scenario_latex))
+                 latex=(visit_scenario_latex, depart_scenario_latex),
+                 )
     app.add_generic_role('strike', strike)
     app.add_directive('task', Task)
     app.add_directive('level', Level)
