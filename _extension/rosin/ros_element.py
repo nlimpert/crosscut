@@ -1,4 +1,4 @@
-# Copyright (C) 2019 MASCOR Institute. All rights reserved.
+# Copyright (C) 2019-2020 MASCOR Institute. All rights reserved.
 
 """
 The rosin.ROS_Element extension of Sphinx provides several text roles to
@@ -44,8 +44,8 @@ Short variants:
 """
 
 __author__ = "Marcus Meeßen"
-__copyright__ = "Copyright (C) 2019 MASCOR Institute"
-__version__ = "1.0"
+__copyright__ = "Copyright (C) 2019-2020 MASCOR Institute"
+__version__ = "1.1"
 
 import re
 from typing import Dict, List, Tuple
@@ -235,7 +235,10 @@ def process_comm(_app, _doc_name, source: List[str]) -> None:
         raise ExtensionError("Could not process an empty source list.")
 
     source[0]: str = re.sub(
-        r':ros:(%s):`([a-zA-Z_ \n]+)`' % '|'.join(ROSDomain.roles.keys()),
+        # this regex is currently not safe for code blocks, but for inline code
+        # if the role is adjacent to a grave accent on at least one side
+        r'(?<!`):ros:(%s):`([a-zA-Z_ \n]+)`(?!`)'
+        % '|'.join(ROSDomain.roles.keys()),
         lambda x: '/'.join(divide_parts(ROSDomain.roles[x.group(1)].parts,
                                         re.split(r'[ \n]+', x.group(2)))),
         source[0]
