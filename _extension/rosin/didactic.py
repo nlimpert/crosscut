@@ -42,7 +42,7 @@ __copyright__ = "Copyright (C) 2019-2020 MASCOR Institute"
 __version__ = "1.5"
 
 import re
-from typing import Dict, List, Set, Tuple, Type
+from typing import Any, Dict, List, Tuple, Type, Match
 
 from docutils.nodes import Admonition, Element, General, Inline, Node, \
     TextElement, inline, title
@@ -85,8 +85,7 @@ class task(Admonition, Element):
 
 def visit_task_html(self: HTMLTranslator, node: task) -> None:
     self.body.append('<div class="admonition task warning">')
-    node.insert(0, title('task', 'Task'))
-    self.set_first_last(node)
+    node.insert(0, title('task', "Task"))
 
 
 def depart_task_html(self: HTMLTranslator, _node) -> None:
@@ -102,16 +101,14 @@ def depart_task_latex(self: LaTeXTranslator, _node) -> None:
 
 
 class Task(BaseAdmonition):
-    node_class = task
+    node_class: Type[Node] = task
 
 
 def visit_role_html(node_class: Type, heading: str):
     def func(self: HTMLTranslator, node: node_class) -> None:
         self.body.append('<div class="admonition note %s">'
                          % node_class.__name__)
-        node.insert(0, title('%s-note' % node_class.__name__,
-                             '%s' % heading))
-        self.set_first_last(node)
+        node.insert(0, title('%s-note' % node_class.__name__, '%s' % heading))
 
     return func
 
@@ -150,7 +147,7 @@ class role_author(Admonition, Element):
 
 
 class Author(RoleAdmonition):
-    node_class = role_author
+    node_class: Type[Node] = role_author
 
 
 # noinspection PyPep8Naming
@@ -159,7 +156,7 @@ class role_teacher(Admonition, Element):
 
 
 class Teacher(RoleAdmonition):
-    node_class = role_teacher
+    node_class: Type[Node] = role_teacher
 
 
 # noinspection PyPep8Naming
@@ -168,7 +165,7 @@ class role_tutor(Admonition, Element):
 
 
 class Tutor(RoleAdmonition):
-    node_class = role_tutor
+    node_class: Type[Node] = role_tutor
 
 
 # noinspection PyPep8Naming
@@ -177,19 +174,19 @@ class role_mixed(Admonition, Element):
 
 
 class Mixed(Directive):
-    has_content = True
-    required_arguments = 1
-    final_argument_whitespace = True
+    has_content: bool = True
+    required_arguments: int = 1
+    final_argument_whitespace: bool = True
 
     def run(self) -> List[Node]:
-        active_roles = self.arguments[0].split()
-        raw_text = ' '.join(self.content)
-        inline_text = inline(text=raw_text)
-        admonitions = []
+        active_roles: List[str] = self.arguments[0].split()
+        raw_text: str = ' '.join(self.content)
+        admonitions: List[Node] = []
+        inline_node = inline(text=raw_text)
 
         for role in [Author, Teacher, Tutor]:
             if role.enabled and role.__name__.lower() in active_roles:
-                admonitions.append(role.node_class(raw_text, inline_text))
+                admonitions.append(role.node_class(raw_text, inline_node))
 
         return admonitions
 
@@ -215,20 +212,15 @@ class RoleDomain(Domain):
 
 # noinspection PyPep8Naming
 class level(General, Element):
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-
-        self.levels: Set[str] = set()
+    pass
 
 
 def visit_level_html(self: HTMLTranslator, node: level) -> None:
-    self.body.append(
-        '<div class="level"><div><div class="level-badges">%s</div><div>'
-        % ''.join(['<span class="level-label">%s</span>'
-                   % Level.levels[label]
-                   for label in node.levels])
-    )
-    self.set_first_last(node)
+    self.body.append('<div class="level"><div>'
+                     '<div class="level-badges">%s</div><div>'
+                     % ''.join(['<span class="level-label">%s</span>'
+                                % Level.levels[label]
+                                for label in node.attributes['levels']]))
 
 
 def depart_level_html(self: HTMLTranslator, _node) -> None:
@@ -246,34 +238,35 @@ def depart_level_latex(self: LaTeXTranslator, _node) -> None:
 
 
 class Level(Only):
-    option_spec = {'raw': directives.class_option}
+    option_spec: Dict[str, Any] = {'raw': directives.class_option}
     levels: Dict[str, str]
 
     def run(self) -> List[Node]:
-        only = super().run()[0]
-        node = level()
-        node.levels = list(option.replace("-", "_")
-                           for option in self.options['raw'])
-        only.children, node.children = node, only.children
-        return [only]
+        only_node: Node = super().run()[0]
+        level_node = level(
+            levels=[option.replace("-", "_")
+                    for option in self.options['raw']],
+        )
+
+        for child in only_node.children:
+            level_node.append(child)
+            only_node.remove(child)
+        only_node.append(level_node)
+
+        return [only_node]
 
 
 # noinspection PyPep8Naming
 class scenario(General, Element):
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-
-        self.scenarios: Set[str] = set()
+    pass
 
 
 def visit_scenario_html(self: HTMLTranslator, node: scenario) -> None:
-    self.body.append(
-        '<div class="scenario"><div><div class="scenario-badges">%s</div><div>'
-        % ''.join(['<span class="scenario-label">%s</span>'
-                   % Scenario.scenarios[label]
-                   for label in node.scenarios])
-    )
-    self.set_first_last(node)
+    self.body.append('<div class="scenario"><div>'
+                     '<div class="scenario-badges">%s</div><div>'
+                     % ''.join(['<span class="scenario-label">%s</span>'
+                                % Scenario.scenarios[label]
+                                for label in node.attributes['scenarios']]))
 
 
 def depart_scenario_html(self: HTMLTranslator, _node) -> None:
@@ -291,22 +284,28 @@ def depart_scenario_latex(self: LaTeXTranslator, _node) -> None:
 
 
 class Scenario(Only):
-    option_spec = {'raw': directives.class_option}
+    option_spec: Dict[str, Any] = {'raw': directives.class_option}
     scenarios: Dict[str, str]
 
     def run(self) -> List[Node]:
-        only = super().run()[0]
-        node = scenario()
-        node.scenarios = list(option.replace("-", "_")
-                              for option in self.options['raw'])
-        only.children, node.children = node, only.children
-        return [only]
+        only_node: Node = super().run()[0]
+        scenario_node = scenario(
+            scenarios=[option.replace("-", "_")
+                       for option in self.options['raw']],
+        )
+
+        for child in only_node.children:
+            scenario_node.append(child)
+            only_node.remove(child)
+        only_node.append(scenario_node)
+
+        return [only_node]
 
 
 def generate_expression(app: Sphinx, doc_name: str, directive: str,
                         original: str) -> str:
-    invalid_keywords = re.search(r'(all|not|and|or|is|True|False|None)',
-                                 original)
+    invalid_keywords: Match = re.search(r'(all|not|and|or|is|True|False|None)',
+                                        original)
     if invalid_keywords is not None:
         raise ExtensionError("Invalid keyword '%s' in %s expression."
                              % (invalid_keywords.group(1), directive))
@@ -340,7 +339,7 @@ def process_selectors(app: Sphinx, doc_name, source: List[str]) -> None:
     line_groups: List[str] = re.split(r'(\n{2,})', source[0])
 
     for index, line_group in enumerate(line_groups):
-        line_groups[index] = re.sub(
+        line_groups[index]: str = re.sub(
             r'^(([ ]*)\.\. (level|scenario):: )([\n\w\- ]+)',
             lambda x: '%s%s\n%s   :raw: %s' % (x.group(1),
                                                generate_expression(app,
