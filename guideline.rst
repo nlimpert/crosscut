@@ -1153,3 +1153,83 @@ Options of programs are documented as follows and can also be linked as
 
       :program:`test`
       :option:`test -t`
+
+
+********************************************************************************
+Teaching Approach
+********************************************************************************
+
+[TBD]
+
+.. the following is taken from meeting minutes
+.. we need to define the target groups
+.. we need to define the intended learning outcomes
+.. we need to motivate students (and later industry) for ROS
+.. - teach how to do (accomplish) something in ROS that is currently being done with traditional automation.
+.. - then move to the next level, do the next step, do something intelligent with ROS (some task that requires the machine intelligence and flexibility that comes with ROS)
+
+.. How to Implement Constructive Alignment
+.. What is important
+.. - Student Learning Focus (activation)
+.. - Student Motivation (intrinsic -vs- extrinsic)
+.. - Constructivism (transmission is dead, knowledge is actively constructed)
+.. - SOLO Taxonomy (hierarchy of competences, deep learning)
+.. - Alignment (make explicit ILOs (Intended Learning Outcomes, exam = ILO = assessment))
+.. How do people get good at something?
+.. Not because somebody told them but because they practiced it!
+.. --> Knowledge is actively constructed.
+.. Main idea of alignment: Exams are supposed to assess "explain, relate, prove, apply"
+
+.. the most important thing to start with is defining the learning outcomes
+.. It is important to fix the teacher's intention
+.. → From content to competence
+.. Competence as goals: from nouns to verbs
+.. competence := knowledge + capacity to /act/ upon it
+.. understanding is of course pre-requisitional! inherently operational
+
+
+Levels
+================================================================================
+
+The teaching material is grouped into different levels, which are marked
+accordingly.
+
+.. level:: beginner advanced
+
+   This section should show up only for the levels "beginner", "advanced",
+   and "all".
+
+   The border on the right indicates were this region ends.
+
+.. level:: intermediate
+
+   This section should show up only for intermediates and "all".
+
+.. level:: advanced
+
+   This section should show up only for advanced and "all".
+
+
+Scenarios
+================================================================================
+
+Beyond the levels, the material is also grouped into different scenarios.
+Sections that focus to a specific scenario are marked accordingly.
+
+.. scenario:: linux
+
+   This section should show up only for the scenarios "linux" and "all".
+
+.. scenario:: turtle_bot_3
+
+   This section should show up only for turtle_bot_3 and "all".
+
+.. scenario:: turtle_sim
+
+   This section should show up only for turtle_sim and "all".
+
+.. level:: advanced
+
+   .. scenario:: linux
+
+      This is visible for "advanced" level with the "linux" scenario.
