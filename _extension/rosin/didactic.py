@@ -11,8 +11,15 @@ While this text is shown normal, :strike:`this text will be crossed out`.
 
 .. task:: An admonition for highlighting tasks.
 
-.. internal:: An internal note that should be visible for the instructor or
-   author only.
+.. role:author:: A note that is only visible in the author's edition.
+
+.. role:teacher:: A note that is only visible in the teacher's edition.
+
+.. role:tutor:: A note that is only visible in the tutor's edition.
+
+.. role:mixed:: { author | teacher | tutor }
+
+   A note that is visible for several roles.
 
 .. level:: { beginner | intermediate | advanced | ... }
 
@@ -32,18 +39,18 @@ While this text is shown normal, :strike:`this text will be crossed out`.
 
 __author__ = "Marcus Meeßen"
 __copyright__ = "Copyright (C) 2019-2020 MASCOR Institute"
-__version__ = "1.2"
+__version__ = "1.3"
 
 import re
-from typing import Dict, List, Set
+from typing import Dict, List, Set, Tuple, Type
 
-from docutils import nodes
 from docutils.nodes import Admonition, Element, General, Inline, Node, \
-    TextElement
-from docutils.parsers.rst import directives
+    TextElement, inline, title
+from docutils.parsers.rst import Directive, directives
 from docutils.parsers.rst.directives.admonitions import BaseAdmonition
 from sphinx.application import Sphinx
 from sphinx.directives import Only
+from sphinx.domains import Domain
 from sphinx.errors import ExtensionError
 from sphinx.writers.html import HTMLTranslator
 
@@ -76,7 +83,7 @@ class task(Admonition, Element):
 
 def visit_task_html(self: HTMLTranslator, node: task) -> None:
     self.body.append('<div class="admonition task warning">')
-    node.insert(0, nodes.title('task', 'Task'))
+    node.insert(0, title('task', 'Task'))
     self.set_first_last(node)
 
 
@@ -96,35 +103,112 @@ class Task(BaseAdmonition):
     node_class = task
 
 
-# noinspection PyPep8Naming
-class internal(Admonition, Element):
-    pass
+def visit_role_html(node_class: Type, heading: str):
+    def func(self: HTMLTranslator, node: node_class) -> None:
+        self.body.append('<div class="admonition note %s">'
+                         % node_class.__name__)
+        node.insert(0, title('%s-note' % node_class.__name__,
+                             '%s' % heading))
+        self.set_first_last(node)
+
+    return func
 
 
-def visit_internal_html(self: HTMLTranslator, node: internal) -> None:
-    self.body.append('<div class="admonition note internal">')
-    node.insert(0, nodes.title('internal-note', 'Internal Note'))
-    self.set_first_last(node)
+def depart_role_html():
+    def func(self: HTMLTranslator, _node) -> None:
+        self.body.append('</div>')
+
+    return func
 
 
-def depart_internal_html(self: HTMLTranslator, _node) -> None:
-    self.body.append('</div>')
+def visit_role_latex():
+    def func(_self, _node) -> None:
+        pass
+
+    return func
 
 
-def visit_internal_latex(_self, _node) -> None:
-    pass
+def depart_role_latex():
+    def func(_self, _node) -> None:
+        pass
+
+    return func
 
 
-def depart_internal_latex(_self, _node) -> None:
-    pass
-
-
-class Internal(BaseAdmonition):
-    node_class = internal
+class RoleAdmonition(BaseAdmonition):
     enabled: bool = False
 
     def run(self) -> List[Node]:
-        return super().run() if Internal.enabled is True else []
+        return super().run() if self.enabled is True else []
+
+
+# noinspection PyPep8Naming
+class role_author(Admonition, Element):
+    pass
+
+
+class Author(RoleAdmonition):
+    node_class = role_author
+
+
+# noinspection PyPep8Naming
+class role_teacher(Admonition, Element):
+    pass
+
+
+class Teacher(RoleAdmonition):
+    node_class = role_teacher
+
+
+# noinspection PyPep8Naming
+class role_tutor(Admonition, Element):
+    pass
+
+
+class Tutor(RoleAdmonition):
+    node_class = role_tutor
+
+
+# noinspection PyPep8Naming
+class role_mixed(Admonition, Element):
+    pass
+
+
+class Mixed(Directive):
+    has_content = True
+    required_arguments = 1
+    final_argument_whitespace = True
+
+    def run(self) -> List[Node]:
+        active_roles = self.arguments[0].split()
+        raw_text = ' '.join(self.content)
+        inline_text = inline(text=raw_text)
+        admonitions = []
+
+        for role in [Author, Teacher, Tutor]:
+            if role.enabled and role.__name__.lower() in active_roles:
+                admonitions.append(role.node_class(raw_text, inline_text))
+
+        return admonitions
+
+
+class RoleDomain(Domain):
+    name: str = 'role'
+    label: str = "Intended Role of a User"
+    directives: Dict[str, Type[Directive]] = {
+        'mixed': Mixed,
+        'author': Author,
+        'teacher': Teacher,
+        'tutor': Tutor,
+    }
+
+    # noinspection SpellCheckingInspection
+    def merge_domaindata(self, *args, **kwargs) -> None:
+        pass
+
+    # noinspection SpellCheckingInspection
+    def resolve_any_xref(self, *args, **kwargs) -> List[Tuple[str, Node]]:
+        pass
 
 
 LEVELS: Dict[str, str] = {
@@ -285,19 +369,34 @@ def process_selectors(_app, doc_name, source: List[str]) -> None:
 
 
 def setup(app: Sphinx):
-    if 'internal' in app.tags:
-        Internal.enabled = True
+    if 'author' in app.tags:
+        Author.enabled = True
+    if 'teacher' in app.tags:
+        Teacher.enabled = True
+    if 'tutor' in app.tags:
+        Tutor.enabled = True
 
     app.add_stylesheet('style/didactic.css')
+    app.add_domain(RoleDomain)
     app.add_node(strike,
                  html=(visit_strike_html, depart_strike_html),
                  latex=(visit_strike_latex, depart_strike_latex))
     app.add_node(task,
                  html=(visit_task_html, depart_task_html),
                  latex=(visit_task_latex, depart_task_latex))
-    app.add_node(internal,
-                 html=(visit_internal_html, depart_internal_html),
-                 latex=(visit_internal_latex, depart_internal_latex))
+    app.add_node(role_tutor,
+                 html=(visit_role_html(role_tutor, "Tutor Note"),
+                       depart_role_html()),
+                 latex=(visit_role_latex(), depart_role_latex()))
+    app.add_node(role_author,
+                 html=(visit_role_html(role_author, "Author Note"),
+                       depart_role_html()),
+                 latex=(visit_role_latex(), depart_role_latex()))
+    app.add_node(role_teacher,
+                 html=(visit_role_html(role_teacher, "Teacher Note"),
+                       depart_role_html()),
+                 latex=(visit_role_latex(), depart_role_latex()))
+    app.add_node(role_mixed)
     app.add_node(level,
                  html=(visit_level_html, depart_level_html),
                  latex=(visit_level_latex, depart_level_latex))
@@ -306,7 +405,6 @@ def setup(app: Sphinx):
                  latex=(visit_scenario_latex, depart_scenario_latex))
     app.add_generic_role('strike', strike)
     app.add_directive('task', Task)
-    app.add_directive('internal', Internal)
     app.add_directive('level', Level)
     app.add_directive('scenario', Scenario)
     app.connect('source-read', process_selectors)

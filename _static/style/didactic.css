@@ -1,9 +1,25 @@
-div.admonition.internal {
+div.admonition.role_tutor {
     background: #ffb2dd;
 }
 
-div.admonition.internal > p.admonition-title {
+div.admonition.role_tutor > p.admonition-title {
     background: #c94f7c;
+}
+
+div.admonition.role_author {
+    background: #7fdbd9;
+}
+
+div.admonition.role_author > p.admonition-title {
+    background: #009194;
+}
+
+div.admonition.role_teacher {
+    background: #b7da83;
+}
+
+div.admonition.role_teacher > p.admonition-title {
+    background: #6faf00;
 }
 
 div.admonition.task {
