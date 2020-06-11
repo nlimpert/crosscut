@@ -1233,3 +1233,123 @@ Sections that focus to a specific scenario are marked accordingly.
    .. scenario:: linux
 
       This is visible for "advanced" level with the "linux" scenario.
+
+.. .. internal::
+
+*****************************************************************************
+.rst Code Enforcements
+*****************************************************************************
+
+[TBD]
+
+-  Line length is limited to 80, in-text breaks should take place on
+   the first opportunity after column 70.
+
+-  Headings
+
+   -  :rst:`#` with overline, for parts or :html:`<h1>...</h1>`
+   -  :rst:`*` with overline, for chapters
+   -  :rst:`=`, for sections
+   -  :rst:`-`, for subsections
+   -  :rst:`^`, for subsubsections
+   -  :rst:`"`, for paragraphs
+   -  Forbidden: ` : ' " ~ ^ _ * + # < >
+
+-  All allowed text roles are:
+
+   -  :rst:`:emphasis:` (:rst:`*\...*` is forbidden)
+   -  :rst:`:strong:` (:rst:`**\...**` is forbidden)
+   -  :rst:`:code:`
+   -  :rst:`:subscript:` (:rst:`:sub:` or "hacks" like
+      :rst:`:math:`^{\...}`` are forbidden)
+   -  :rst:`:superscript:` (:rst:`:sup:` or "hacks" like
+      :rst:`:math:`\_{\...}`` are forbidden)
+   -  :rst:`:math:`
+   -  :rst:`::`
+   -  :rst:`::`
+   -  :rst:`::`
+   -  :rst:`:gui:` (:rst:`:guilabel` is forbidden)
+   -  :rst:`:menuselection:`
+   -  :rst:`:ros:`
+   -  :rst:`:ref:` (:rst:`:any:` is forbidden)
+   -  :rst:`:numref:` ("hacks" like :literal:`Figure :ref:\`...\`` are forbidden)
+   -  :rst:`:download:`
+   -  :rst:`:term:`
+   -  :rst:`:file:`
+   -  :rst:`:kbd:`
+   -  :rst:`:program:` / :rst:`:option:` / :rst:`:command`
+
+-  Admonitions (see :numref:`guideline-admonitions` for semantics)
+
+   1101.
+      The directive :rst:`.. hint::` is allowed to help the reader find the
+      right answer
+   1102.
+      The directive :rst:`.. note::` is allowed to
+   1103.
+      The directive :rst:`.. warning::` is allowed to
+   1104.
+      The directive :rst:`.. danger::` is allowed to
+   1105.
+      The directive :rst:`.. task::` is allowed to
+   1106.
+      The directive :rst:`.. internal::` is allowed to hide information that
+      should only be visible to authors.
+
+   1201.
+      The directive :rst:`.. admonition::` is forbidden.
+   1202.
+      The directive :rst:`.. tip::` is forbidden.
+   1203.
+      The directive :rst:`.. error::` is forbidden.
+   1204.
+      The directive :rst:`.. important::` is forbidden.
+   1205.
+      The directive :rst:`.. caution::` is forbidden.
+
+   1301.
+      The option :rst:`:class:` is forbidden for all admonitions.
+
+   -  :rst:`.. glossary::`
+   -  :rst:`.. figure::` (:rst:`:image:` is forbidden for all teaching material,
+      must not have a :rst:`:name:` option, must have an :rst:`:alt:` option)
+   -  :rst:`.. table::` (must not have a :rst:`:name:` option)
+   -  :rst:`.. toctree::` (only allowed in :file:`index.rst`, must have
+      the options :rst:`:maxdepth: 2` and :rst:`:numbered:` for all teaching
+      material, and :rst:`:maxdepth: 1` for all other contents) a second-level
+      heading "Contents" must precede a TOC.
+   -  :rst:`.. code-block::` (caption)
+   -  :rst:`.. literalinclude::` (TODO: linenos)
+
+-  All allowed constructs are:
+
+   -  Lists unordered, ordered (Limit to 1. a. ...???)
+   -  Tables "grid tables"
+
+
+.. topic:: Topic Title
+
+    Subsequent indented lines comprise
+    the body of the topic, and are
+    interpreted as body elements.
+
+.. sidebar:: Sidebar Title
+   :subtitle: Optional Sidebar Subtitle
+
+   Subsequent indented lines comprise
+   the body of the sidebar, and are
+   interpreted as body elements.
+
+.. epigraph::
+
+   No matter where you go, there you are.
+
+   -- Buckaroo Banzai
+
+.. versionchanged:: r2
+
+   -  A section about the meaning of life.
+
+.. versionchanged:: r3
+
+   -  A section about the meaning of life.
