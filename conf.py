@@ -82,7 +82,7 @@ latex_elements = {
             }%
           }%
           ~\includegraphics[height=0.6cm]{../../_resource/image/logo/mascor_left_no_fh_aachen.pdf}%
-          \quad\includegraphics[height=0.6cm]{../../_resource/image/icon/cc-by-nc-nd-eu.pdf}%
+          \quad\includegraphics[height=0.6cm]{../../_resource/image/icon/cc_by-nc-nd_eu.pdf}%
         }
         \fancyfoot[C,CO,CE]{%
           \centering%
