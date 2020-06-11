@@ -5,6 +5,7 @@
 !*.gif
 !*.ico
 !*.jpg
+!*.pdf
 !*.png
 !*.svg
 !*.webp
