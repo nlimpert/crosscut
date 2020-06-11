@@ -2,21 +2,22 @@ import os
 import sys
 
 # General configuration of Sphinx and extensions
-needs_sphinx = '1.6.7'
+needs_sphinx = '1.8.4'
 needs_extensions = {
     'sphinx.ext.ifconfig': '1.0',
     'sphinx.ext.mathjax': '1.0',
-    'sphinx.ext.todo': '1.0'
+    'sphinx.ext.todo': '1.0',
 }
-sys.path.append(os.path.abspath('%s%s_extension' % (os.curdir, os.sep)))
+sys.path.append(os.path.abspath(os.path.join(os.curdir, '_extension')))
 extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.mathjax',
     'sphinx.ext.todo',
+    'sphinxcontrib.rsvgconverter',
     'rosin.didactic',
     'rosin.gui',
     'rosin.meta',
-    'rosin.ros_element'
+    'rosin.ros_element',
 ]
 master_doc = 'index'
 templates_path = ['_template']
@@ -29,11 +30,7 @@ project = "ROS-I Academy"
 project_base = project.replace(' ', '_')
 copyright = "2019, MASCOR Institute, FH Aachen"
 description = ''
-author = [
-    "Nicolas Limpert",
-    "Marcus Meeßen",
-    "Patrick Wiesen"
-]
+author = "Nicolas Limpert \\and Marcus Meeßen \\and Patrick Wiesen"
 version = "1.0"
 release = "1.0-r1"
 
@@ -42,21 +39,22 @@ html_theme = 'sphinx_rtd_theme'
 html_theme_options = {}
 html_show_sphinx = False
 html_show_sourcelink = False
+html_copy_source = False
 html_static_path = ['_static']
 html_extra_path = ['_extra']
 
 # Options for LaTeX
 latex_engine = 'pdflatex'
 latex_documents = [
-    (master_doc, '%s.tex' % project_base, project,
-     ' \\and '.join(author), 'manual')
+    (master_doc, '%s.tex' % project_base, project, author, 'manual'),
 ]
 latex_elements = {
     'papersize': 'a4paper',
     'pointsize': '10pt',
     'preamble': r'''
+    \usepackage{fancyhdr}
+    \setlength{\headheight}{36pt}
     \makeatletter
-      \usepackage{fancyhdr}
       \pagestyle{normal}
       \fancypagestyle{normal}{
         \fancyhf{}
