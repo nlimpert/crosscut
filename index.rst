@@ -20,7 +20,7 @@ Contents
    :maxdepth: 1
 
    contributors
-   glossary
+   general_glossary
 
 
 ********************************************************************************
