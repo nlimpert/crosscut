@@ -425,3 +425,731 @@ prepared for working with the offered material.
       changes and leaves them in the working tree. :bash:`git reset --keep
       <commit>` will prevent the reset from overriding files in your working
       tree.
+
+
+********************************************************************************
+Stylistic Hints
+********************************************************************************
+
+
+Elements of the Robot Operating System
+================================================================================
+
+Different elements of :term:`ROS` are highlighted all over the offered material.
+If you do not remember what a specific colour means or in case you have problems
+distinguishing the used colours you can hover the element and a hint is shown.
+For some official :term:`ROS` elements like messages you can directly navigate
+to the official documentation by clicking on the highlighted element. Elements
+that are created by ourselves within a tutorial are marked by a small "*i*".
+
+-  Packages: :ros:package:`package` (dead link) or :ros:package-i:`package`
+   mean that you are reading something about a :term:`ROS` package.
+
+   .. hint:: For official packages like :ros:package:`sensor_msgs` there is a
+      link generated which leads you directly to the wiki.
+
+   .. internal:: Use :rst:`:ros:package:` or :rst:`:ros:package-i:`. The latter
+      does not create a link to the wiki page of the package, due to the fact
+      that it is suggested for unofficial packages.
+
+      .. rst:role:: ros:package
+
+         Used to highlight an official :term:`ROS` package and create a link to
+         the online documentation.
+
+         .. code-block:: rst
+
+            :ros:package:`<package>`
+
+      .. rst:role:: ros:package-i
+
+         Used to highlight a non-official :term:`ROS` package, e.g. the ones
+         created by ourselves.
+
+         .. code-block:: rst
+
+            :ros:package-i:`<package>`
+
+-  Nodes: :ros:node:`node package` or :ros:node-i:`node package` mean that this
+   is the program name of a :term:`ROS` node.
+
+   .. internal:: Use :rst:`:ros:node:` or :rst:`:ros:node-i:`. For a shorter
+      version add the keyword :rst:`short` before the package name.
+
+      .. rst:role:: ros:node
+
+         Used to highlight a node of an official :term:`ROS` package.
+
+         .. code-block:: rst
+
+            :ros:node:`<node> (short) <package>`
+
+      .. rst:role:: ros:node-i
+
+         Used to highlight a node of a non-official :term:`ROS` package.
+
+         .. code-block:: rst
+
+            :ros:node-i:`<package> (short) <node>`
+
+-  Messages: :ros:message:`message package` (dead link) or
+   :ros:message-i:`message package` are marked with a small "*m*", which allows
+   you to distinguish between the different communication formats.
+
+   .. hint:: For official messages like :ros:message:`Image sensor_msgs` there
+      is a link generated which leads you directly to the message definition.
+
+   .. internal:: Use :rst:`:ros:message:` or :rst:`:ros:message-i:`. For a
+      shorter version add the keyword :rst:`short` before the package name.
+
+      .. rst:role:: ros:message
+
+         Used to highlight an official :term:`ROS` message and create a link to
+         the online documentation.
+
+         .. code-block:: rst
+
+            :ros:message:`<message> (short) <package>`
+
+      .. rst:role:: ros:message-i
+
+         Used to highlight a non-official :term:`ROS` message, e.g. the ones
+         created by ourselves.
+
+         .. code-block:: rst
+
+            :ros:message-i:`<message> (short) <package>`
+
+-  Services: :ros:service:`service package` or :ros:service-i:`service package`
+   are marked with a small "*s*", which allows you to distinguish between the
+   different communication formats.
+
+   .. hint:: For official services like :ros:service:`GetPlan nav_msgs` there
+      is a link generated which leads you directly to the service definition.
+
+   .. internal:: Use :rst:`:ros:service:` or :rst:`:ros:service-i:`. For a
+      shorter version add the keyword :rst:`short` before the package name.
+
+      .. rst:role:: ros:service
+
+         Used to highlight an official :term:`ROS` service and create a link to
+         the online documentation.
+
+         .. code-block:: rst
+
+            :ros:service:`<service> (short) <package>`
+
+      .. rst:role:: ros:service-i
+
+         Used to highlight a non-official :term:`ROS` service, e.g. the ones
+         created by ourselves.
+
+         .. code-block:: rst
+
+            :ros:service-i:`<service> (short) <package>`
+
+-  Actions: :ros:action:`action package` or :ros:action-i:`action package` are
+   marked with a small "*a*", which allows you to distinguish between the
+   different communication formats.
+
+   .. hint:: For official actions like :ros:action:`MoveBase move_base_msgs`
+      there is a link generated which leads you directly to action definition.
+
+   .. internal:: Use :rst:`:ros:action:` or :rst:`:ros:action-i:`. For a shorter
+      version add the keyword :rst:`short` before the package name.
+
+      .. rst:role:: ros:action
+
+         Used to highlight an official :term:`ROS` action and create a link to
+         the online documentation.
+
+         .. code-block:: rst
+
+            :ros:action:`<action> (short) <package>`
+
+      .. rst:role:: ros:action-i
+
+         Used to highlight a non-official :term:`ROS` action, e.g. the ones
+         created by ourselves.
+
+         .. code-block:: rst
+
+            :ros:action-i:`<action> (short) <package>`
+
+-  Parameters: :ros:parameter:`parameter`, :ros:parameter-i:`parameter`,
+   :ros:parameter-np:`parameter node package`, and :ros:parameter-inp:`parameter
+   node package` represent different scenarios of how parameters are used. There
+   are some that are used in a global manner and others that are only used to
+   configure nodes.
+
+   .. internal:: Use :rst:`:ros:parameter:`, :rst:`:ros:parameter-i:`,
+      :rst:`:ros:parameter-np:` or :rst:`:ros:parameter-inp:`. For a shorter
+      version add the keyword :rst:`short` before the node name or the package
+      name.
+
+      .. rst:role:: ros:parameter
+
+         Used to highlight parameter that is used in an official setup.
+
+         .. code-block:: rst
+
+            :ros:parameter:`<parameter>`
+
+      .. rst:role:: ros:parameter-i
+
+         Used to highlight parameter that is used in a non-official setup, e.g.
+         the ones we define by ourselves.
+
+         .. code-block:: rst
+
+            :ros:parameter-i:`<parameter>`
+
+      .. rst:role:: ros:parameter-np
+
+         Used to highlight parameter that is used by a node of an official
+         :term:`ROS` packages.
+
+         .. code-block:: rst
+
+            :ros:parameter-np:`<parameter> (short) <node> (short) <package>`
+
+      .. rst:role:: ros:parameter-inp
+
+         Used to highlight parameter that is used by a node of a non-official
+         :term:`ROS` packages, e.g. the ones we define by ourselves.
+
+         .. code-block:: rst
+
+            :ros:parameter-inp:`<parameter> (short) <node> (short) <package>`
+
+-  Topics: :ros:topic:`topic`, :ros:topic-i:`topic`, :ros:topic-np:`topic node
+   package`, and :ros:topic-inp:`topic node package` represent different
+   scenarios of how topics are used. There are some that are used in a global
+   manner and others that are only used by certain nodes.
+
+   .. internal:: Use :rst:`:ros:topic:`, :rst:`:ros:topic-i:`,
+      :rst:`:ros:topic-np:` or :rst:`:ros:topic-inp:`. For a shorter version add
+      the keyword :rst:`short` before the node name or the package name.
+
+      .. rst:role:: ros:topic
+
+         Used to highlight topic that is used in an official setup.
+
+         .. code-block:: rst
+
+            :ros:topic:`<topic>`
+
+      .. rst:role:: ros:topic-i
+
+         Used to highlight topic that is used in a non-official setup, e.g.
+         the ones we define by ourselves.
+
+         .. code-block:: rst
+
+            :ros:topic-i:`<topic>`
+
+      .. rst:role:: ros:topic-np
+
+         Used to highlight topic that is used by a node of an official
+         :term:`ROS` packages.
+
+         .. code-block:: rst
+
+            :ros:topic-np:`<topic> (short) <node> (short) <package>`
+
+      .. rst:role:: ros:topic-inp
+
+         Used to highlight parameter that is used by a node of a non-official
+         :term:`ROS` packages, e.g. the ones we define by ourselves.
+
+         .. code-block:: rst
+
+            :ros:topic-inp:`<topic> (short) <node> (short) <package>`
+
+
+Other Elements
+================================================================================
+
+-  Files: Files and paths look like :file:`path/file_name` or
+   :file:`/home/{user}/catkin_ws` if there is a user-specific part.
+
+   .. internal:: Use the :rst:`:file:` role for files to provide a uniform look.
+
+      .. code-block:: rst
+
+         :file:`path/file_name`
+         :file:`/home/{user}/catkin_ws`
+
+-  Multimedia: Mostly directly embedded and available for download.
+
+   :Embedded:
+      .. raw:: html
+
+          <video width="480" controls>
+            <source src="_downloads/big_buck_bunny_trailer.ogg" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+
+   :Downloadable:
+      :download:`Big Buck Bunny (Trailer)
+      <_resource/video/big_buck_bunny_trailer.ogg>`
+
+
+   .. internal:: Embed videos with raw HTML 5.
+
+      .. code-block:: rst
+
+            .. raw:: html
+
+                <video width="480" controls>
+                  <source src="_downloads/big_buck_bunny_trailer.ogg"
+                          type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+
+      Provide downloads with the :rst:`:download:` role, do not use normal
+      links for this purpose.
+
+      .. code-block:: rst
+
+         :download:`Big Buck Bunny (Trailer) <_resource/video/big_buck_bunny_trailer.ogg>`
+
+-  Keyboard-Shortcuts: :kbd:`Ctrl-C Ctrl-V Alt-Del` whereby the minus sign links
+   key combinations and the space separates individual steps of a key stroke.
+
+   .. only:: internal
+
+      Use the :rst:`:kbd:` role to introduce a key stroke or sequence. Always
+      use the text that is imprinted on a "standard" UK QWERTY keyboard:
+      :code:`Ctrl`, :code:`Alt`, :code:`Tab`, :code:`Shift`, :code:`Del`, and so
+      on. Do never use lowercase and uppercase to substitute a :code:`Shift`,
+      like :kbd:`Shift-a` :math:`\not\rightarrow` :kbd:`A`. Always use
+      capitalized letters as they are imprinted on a keyboard. This is not to be
+      applied for symbols like :kbd:`$` :math:`\not\rightarrow` :kbd:`Shift-4`
+      because this may not work with other layouts. Combined strokes have to be
+      connected with a minus sign "-" and sequences have to be delimited by
+      spaces " ".
+
+      .. code-block:: rst
+
+         :kbd:`Ctrl-C Ctrl-V Alt-Del`
+         :kbd:`Ctrl-a Del`
+
+-  GUI Elements: Different elements have different appearances.
+
+   :Button:
+      .. Never do this in any other document, NEVER!
+
+      :raw-html:`<span onclick="window.alert('Hahaha, what did you think would happen?')"><span>`
+      :gui:button:`Please, click me`
+      :raw-html:`</span></span>`
+
+   :Text/Label:
+      :gui:text:`This is a label`
+
+   :Radio:
+      :gui:radio:`Normal radio button`
+
+      :gui:radio-selected:`Selected radio button`
+
+   :Checkbox:
+      :gui:checkbox:`Normal check box`
+
+      :gui:checkbox-selected:`Selected check box`
+
+      :gui:checkbox-indeterminate:`Indeterminate check box`
+
+   :Textbox:
+      :gui:textbox:`Text box`
+
+   :Dropdown:
+      :gui:dropdown:`Drop-down menu`
+
+
+   :Menu Selection:
+      :menuselection:`&File --> E&xit`.
+
+   .. internal:: Use the different roles of the :rst:`:gui:` domain for any
+      kinds of GUI elements and the :rst:`:menuselection:` role for menu paths.
+
+      .. code-block:: rst
+
+         :menuselection:`&File --> E&xit`
+
+      .. rst:role:: gui:text
+
+         Create a label or text which can be used to reference an actual GUI
+         element.
+
+         .. code-block:: rst
+
+            :gui:text:`This is a label`
+
+      .. rst:role:: gui:button
+
+         Create a button which can be used to reference an actual GUI element.
+
+         .. code-block:: rst
+
+            :gui:button:`Please, click me`
+
+      .. rst:role:: gui:radio
+
+         Create a radio button which can be used to reference an actual GUI
+         element.
+
+         .. code-block:: rst
+
+            :gui:radio:`Normal radio button`
+
+      .. rst:role:: gui:radio-selected
+
+         Create a selected radio button which can be used to reference an actual
+         GUI element.
+
+         .. code-block:: rst
+
+            :gui:radio-selected:`Selected radio button`
+
+      .. rst:role:: gui:checkbox
+
+         Create a check box which can be used to reference an actual GUI
+         element.
+
+         .. code-block:: rst
+
+            :gui:checkbox:`Normal check box`
+
+      .. rst:role:: gui:checkbox-selected
+
+         Create a selected check box which can be used to reference an actual
+         GUI element.
+
+         .. code-block:: rst
+
+            :gui:checkbox-selected:`Selected check box`
+
+      .. rst:role:: gui:checkbox-indeterminate
+
+         Create a indeterminate check box which can be used to reference an
+         actual GUI element.
+
+         .. code-block:: rst
+
+            :gui:checkbox-indeterminate:`Indeterminate check box`
+
+      .. rst:role:: gui:textbox
+
+         Create a text box which can be used to reference an actual GUI element.
+
+         .. code-block:: rst
+
+            :gui:textbox:`Text box`
+
+      .. rst:role:: gui:dropdown
+
+         Create a drop-down menu which can be used to reference an actual GUI
+         element.
+
+         .. code-block:: rst
+
+            :gui:dropdown:`Drop-down menu`
+
+
+.. _guideline-admonitions:
+
+Admonitions
+================================================================================
+
+:Hint:
+   A "hint" gives some useful information that can be used to e.g. fulfill a
+   task or to understand the previous text.
+
+   .. hint:: This is a hint.
+
+   .. internal:: Use the :rst:`hint` directive to produce this admonition.
+
+      .. code-block:: rst
+
+         .. hint:: This is a hint.
+
+:Note:
+   A "note" gives additional information that is not necessary in the current
+   context but may be useful later or in general.
+
+   .. note:: This is a note.
+
+   .. internal:: Use the :rst:`note` directive to produce this admonition.
+
+      .. code-block:: rst
+
+         .. note:: This is a note.
+
+:Warning:
+   A "warning" requires extraordinary attention. At this point a problem or an
+   error occurs frequently, which can be avoided by following the warning's text
+   exactly.
+
+   .. warning:: This is a warning.
+
+   .. internal:: Use the :rst:`warning` directive to produce this admonition.
+
+      .. code-block:: rst
+
+         .. warning:: This is a warning.
+
+:Danger:
+   A "danger" admonition explicitly advises that irreversible damage to the
+   software, in particular to the hardware, can occur at this point. The
+   instructions must be strictly followed.
+
+   .. danger:: This is a danger.
+
+   .. internal:: Use the :rst:`danger` directive to produce this admonition.
+
+      .. code-block:: rst
+
+         .. danger:: This is a danger.
+
+:Task:
+   A "task" tells you what to do in order to get closer to the goal of the
+   course.
+
+   .. task:: This is a task.
+
+   .. internal:: Use the :rst:`task` directive to produce this admonition. This
+      is not a standard directive of reStructuredText, so it requires the
+      :code:`rosin.didactic` extension.
+
+      .. code-block:: rst
+
+         .. task:: This is a task.
+
+.. only:: internal
+
+   :Internal Note:
+      An "internal note" is not visible to the reader, it is intended to be read
+      by authors and trainers only.
+
+      .. internal:: Use the :rst:`internal` directive to... well it is getting
+         too meta in here. This is not a standard directive of reStructuredText,
+         so it requires the :code:`rosin.didactic` extension.
+
+         .. code-block:: rst
+
+            .. internal:: This is an internal.
+
+            .. only:: internal
+
+               This will also be visible only to internals, but without
+               this beautiful box. This is e.g. necessary if you want to
+               hide captions.
+
+   All other available admonitions are not allowed in this project.
+
+
+Lists and Enumerations
+================================================================================
+
+- Enumerations always indicate either a fixed or usual order of operations, like
+
+   :Example:
+
+      #. Start the :bash:`roscore`.
+      #. Run the node.
+
+   or a set of rules
+
+   :Example:
+
+      #. You do not talk about Fight Club.
+      #. You *do not* talk about Fight Club.
+      #. If someone says "stop" or goes limp, taps out the fight is over.
+      #. Only two guys to a fight.
+      #. One fight at a time.
+      #. No shirts, no shoes.
+      #. Fights will go on as long as they have to.
+      #. If this is your first night at Fight Club, you *have* to fight.
+
+-  For all other cases an unordered list is used, e.g. for a number of task that
+   can be done in any order
+
+   :Example:
+      -  Start the subscriber.
+      -  Start the publisher.
+
+   or a shopping list
+
+   :Example:
+      -  Tricycle
+      -  :strike:`Key to room 237` Large Axe
+      -  Some crazy eyes
+
+
+.. _guideline_references:
+
+References
+================================================================================
+
+:Figures:
+   .. _rosin_logo:
+   .. figure:: /_resource/image/logo/rosin.svg
+      :width: 50%
+      :align: center
+
+      The Best Robotics Project in the Whole Wide World
+
+   A figure will be referenced as :numref:`rosin_logo`.
+
+   .. internal:: If a figure is nowhere referenced in the text it might be
+      expandable. Every figure should therefor have a name and should be
+      referenced using the :rst:`:numref:` role.
+
+      .. code-block:: rst
+
+         .. _rosin_logo:
+         .. figure:: /_resource/image/logo/rosin.svg
+            :align: center
+            :width: 50%
+
+            The Best Robotics Project in the Whole Wide World
+
+         :numref:`rosin_logo`
+
+:Tables:
+   .. _rosin_table:
+   .. table:: Some Table About ROSIN.
+
+      +---------------------+------+
+      | Pros                | Cons |
+      +=====================+======+
+      | ROS                 | ---  |
+      | and everything else |      |
+      +---------------------+------+
+
+   A table will be referenced as :numref:`rosin_table`,
+
+   .. internal:: If a table is nowhere referenced in the text is might be
+      expandable. Every table should therefor have a name and should be
+      referenced using the :rst:`:numref:` role.
+
+      .. code-block:: rst
+
+         .. _rosin_table:
+         .. table:: Some Table About ROSIN.
+
+            +---------------------+------+
+            | Pros                | Cons |
+            +=====================+======+
+            | ROS                 | ---  |
+            | and everything else |      |
+            +---------------------+------+
+
+         :numref:`rosin_table`
+
+:Sections:
+   A section will be referenced as :numref:`guideline_references`.
+
+   .. internal:: Labeled sections can be referenced just as figures and tables
+      using the :rst:`:numref:` role.
+
+      .. code-block:: rst
+
+         .. _guideline_references:
+
+         References
+         ================================================================================
+
+         :numref:`guideline_references`
+
+:Terms:
+   Terms will be linked to the glossary, like :term:`ROSIN`.
+
+
+   .. internal:: Terms in a glossary can be referenced with the :rst:`:term:`
+      role.
+
+      .. code-block:: rst
+
+         .. glossary::
+
+            ROSIN
+               ROS Industrial, not to be confused with
+               the german chef Frank Rosin.
+
+         :term:`ROSIN`
+
+
+Text Formatting
+================================================================================
+
+[TBD]
+
+.. only:: internal
+
+   Never combine bold and italics. Use both sparse.
+
+Italics are used
+
+#. to emphasize words, is not synonymous for nothing
+
+   .. only:: internal
+
+      .. hint:: Use italics in this case only when [TBD]
+
+#. or to encourage the reader to critically question the meaning.
+
+   .. only:: internal
+
+      .. hint:: Use italics in this case only when [TBD]
+
+#. or to make reasoning easier, e.g. "...we now want to use the algorithm
+   *which we've implemented yesterday* to...".
+
+   .. only:: internal
+
+      .. hint:: Use italics in this case only when [TBD]
+
+Use bold text only for things that are very often and very easily done wrong
+respectively are forgotten. An admonition might be the better option.
+[TBD] (the above does not apply)
+
+
+Documentation of Programs
+================================================================================
+
+Options of programs are documented as follows and can also be linked as
+:option:`test -t`.
+
+:Example:
+   .. program:: test
+
+   This is a list of options available for the :program:`test` program.
+
+   .. option:: -c
+
+      That helps you cheat... or does it consult a coach? I don't know anymore.
+
+   .. option:: -t
+
+      This will test your knowledge about ROS.
+
+.. internal:: Programs and options can be defined with the :rst:`program` and
+   :rst:`option` directives, and referenced with the roles of the same name.
+
+   .. code-block:: rst
+
+      .. program:: test
+
+      This is a list of options available for the :program:`test` program.
+
+      .. option:: -c
+
+         That helps you cheat... or does it consult a coach? I don't know anymore.
+
+      .. option:: -t
+
+         This will test your knowledge about ROS.
+
+      :program:`test`
+      :option:`test -t`
