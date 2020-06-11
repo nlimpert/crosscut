@@ -1,6 +1,8 @@
 import os
 import sys
 
+from sphinx.util.tags import Tags
+
 # General configuration of Sphinx and extensions
 needs_sphinx = '1.8.4'
 needs_extensions = {
@@ -148,12 +150,19 @@ smartquotes_action = 'qDe'
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
+
 # Tags for topic and selectors that always apply
-tags.add('guideline')
-tags.add('guideline_level_all')
-tags.add('guideline_scenario_all')
-tags.add('glossary_general')
-tags.add('contributors')
+def hex_hash(data: str) -> str:
+    from hashlib import md5
+    return 'H%s' % md5(data.encode('utf-8')).hexdigest()
+
+
+global tags
+tags.add(hex_hash('guideline'))
+tags.add('%s_level_all' % hex_hash('guideline'))
+tags.add('%s_scenario_all' % hex_hash('guideline'))
+tags.add(hex_hash('general_glossary'))
+tags.add(hex_hash('contributors'))
 
 # Miscellaneous settings
 raw_enabled = True
