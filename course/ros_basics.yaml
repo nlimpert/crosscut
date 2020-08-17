@@ -1,0 +1,7 @@
+title: ROS Basics
+default_scenarios: [linux]
+default_levels: [beginner]
+default_lecturers: [John Doe]
+components:
+  module/linux: {}
+  module/ros_fundamentals: {}
