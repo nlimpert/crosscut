@@ -183,10 +183,13 @@ didactic_scenarios = {
     # programming languages
     'cpp': "C++",
     'python': "Python",
+    # robot applications
+    'navigation': "Navigation",
+    'manipulation': "Manipulation",
     # robot platforms
     'kuka_you_bot': "KUKA YouBot",
-    'turtle_bot_3': "TurtleBot3",
-    'turtle_sim': "TurtleSim",
+    'turtlebot_3': "TurtleBot3",
+    'turtlesim': "TurtleSim",
     'universal_robots_ur': "Universal Robots UR Series",
     'universal_robots_ur3': "Universal Robots UR3",
     'universal_robots_ur5': "Universal Robots UR5",

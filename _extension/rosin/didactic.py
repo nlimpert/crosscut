@@ -28,10 +28,10 @@ While this text is shown normal, :strike:`this text will be crossed out`.
    "<filename>_level_all" have to be added to the "tags" object. Define allowed
    keywords with the `didactic_levels` option.
 
-.. scenario:: { turtle_bot_3 | python | ... }
+.. scenario:: { turtlebot_3 | python | ... }
 
    This text is only visible if one of the above scenarios or "all" is included
-   in the configured tags. For example, "<filename>_scenario_turtle_bot_3" or
+   in the configured tags. For example, "<filename>_scenario_turtlebot_3" or
    "<filename>_scenario_all" have to be added to the "tags" object. Define
    allowed keywords with the `didactic_scenarios` option.
 ```

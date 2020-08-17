@@ -126,7 +126,7 @@ is divided into :term:`unit`\ s that form the atomic entities.
    .. code-block:: yaml
 
       title: A Generic Program
-      default_scenarios: [turtle_sim]
+      default_scenarios: [turtlesim]
       default_levels: [beginner]
       default_lectures: [John Doe]
       components:
@@ -1410,13 +1410,13 @@ Sections that focus to a specific scenario are marked accordingly.
 
    This section should show up only for the scenarios "linux" and "all".
 
-.. scenario:: turtle_bot_3
+.. scenario:: turtlebot_3
 
-   This section should show up only for turtle_bot_3 and "all".
+   This section should show up only for turtlebot_3 and "all".
 
-.. scenario:: turtle_sim
+.. scenario:: turtlesim
 
-   This section should show up only for turtle_sim and "all".
+   This section should show up only for turtlesim and "all".
 
 .. level:: advanced
 
