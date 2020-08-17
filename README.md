@@ -1,10 +1,11 @@
-# Academy
+# CROSSCUT
 
-The Academy repository contains the training materials used in the ROS-I Academy
-(https://ros-i.academy) and the ROS-I School (https://ros-i.school). All of this
-material is written in the well readable reStructuredText format. In addition,
-extensions for the Sphinx documentation generator (https://www.sphinx-doc.org),
-which is used to build the output, are developed directly in this repository.
+This repository supports the paper "Compiling ROS Schooling Curricula via
+Contentual Taxonomies" by providing an exemplary set of training material on ROS
+Basics. All of this material is written in the well readable reStructuredText
+format. In addition, extensions for the Sphinx documentation generator
+(https://www.sphinx-doc.org), which is used to build the output, are developed
+directly in this repository.
 
 ## Getting Started
 
@@ -82,22 +83,16 @@ the repository should be located.
 cd ~/<path to your repos>
 ```
 
-Then clone the repository, either via SSH...
+Then clone the repository, either via HTTPS:
 
 ```shell script
-git clone git@git.fh-aachen.de:h2020rosin/academy.git
-```
-
-... or via HTTPS.
-
-```shell script
-git clone https://git.fh-aachen.de/h2020rosin/academy.git
+git clone https://github.com/nlimpert/crosscut.git
 ```
 
 Finally change to the freshly downloaded directory.
 
 ```shell script
-cd academy
+cd crosscut
 ```
 
 ### Generate Output
@@ -120,6 +115,13 @@ in the root directory. Pass `-h` to the script to get a brief overview of the
 available options. For further details, please read the guidelines (see also
 [Contributing](#contributing)) on how to generate entire courses with this
 script.
+
+An example is to generate the current set of the course `ros_basics` by issuing
+the following command:
+
+```shell script
+_script/course_generator.py -e 'author' -s course/ros_basics.yaml --generate
+```
 
 ### Spawn a Local Web Server
 
