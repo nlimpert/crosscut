@@ -1,0 +1,20 @@
+title: Linux introduction
+#default_scenarios: [linux]
+#default_levels: [beginner]
+#default_lecturers: [John Doe]
+components:
+  unit/linux/tutorial/linux_navigation: {
+    levels: [default, intermediate],
+    scenarios: [linux],
+    lecturers: [Jane Doe]
+  }
+  unit/linux/tutorial/ssh: {
+    levels: [default, intermediate],
+    scenarios: [linux],
+    lecturers: [Jane Doe]
+  }
+  unit/linux/tutorial/network_setup: {
+    levels: [default, intermediate],
+    scenarios: [linux],
+    lecturers: [Jane Doe]
+  }
