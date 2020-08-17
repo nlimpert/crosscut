@@ -22,6 +22,18 @@ General Glossary
 .. glossary::
    :sorted:
 
+   ROS
+      The Robot Operating System (ROS) is a robotics middleware
+      providing libraries and tools to help software developers
+      create robot applications.
+
+      .. figure:: _resource/image/logo/ros_logo.svg
+         :align: center
+         :alt: ROS Logo
+         :width: 30%
+
+         ROS Logo
+
    ROSIN
       :term:`ROS`-Industrial quality-assured robot software components, not to
       be confused with the german chef Frank Rosin.
