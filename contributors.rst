@@ -67,6 +67,12 @@ Project Lead
       :Homepage:
          | https://www.fh-aachen.de/en/people/ferrein
 
+      :Address:
+         | Room G 302
+         | Eupener Straße 70
+         | 52066 Aachen
+
+   .. alumni
 
 ********************************************************************************
 Maintainers
@@ -96,6 +102,18 @@ Maintainers
       :Contact:
          | marcus.meessen@alumni.fh-aachen.de
 
+   Schiffer : · Contributors
+      | |dr_rer_nat| Stefan Schiffer
+      | :term:`MASCOR`, FH Aachen, FB5
+
+      :Contact:
+         | s.schiffer@fh-aachen.de
+         | `+49 241 6009 52223 <tel:+49241600952223>`_
+
+      :Address:
+         | Room G 308
+         | Eupener Straße 70
+         | 52066 Aachen
 
 ********************************************************************************
 Authors
@@ -109,3 +127,6 @@ Authors
 
    Meeßen, Marcus : · Contributors
       see :term:`Meeßen`
+
+   Schiffer, Stefan : · Contributors
+      see :term:`Schiffer`
