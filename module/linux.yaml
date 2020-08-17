@@ -8,13 +8,3 @@ components:
     scenarios: [linux],
     lecturers: [Jane Doe]
   }
-  unit/linux/tutorial/ssh: {
-    levels: [default, intermediate],
-    scenarios: [linux],
-    lecturers: [Jane Doe]
-  }
-  unit/linux/tutorial/network_setup: {
-    levels: [default, intermediate],
-    scenarios: [linux],
-    lecturers: [Jane Doe]
-  }

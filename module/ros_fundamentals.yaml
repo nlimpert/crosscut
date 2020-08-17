@@ -1,0 +1,17 @@
+title: ROS Fundamentals
+#default_scenarios: [linux]
+#default_levels: [beginner]
+#default_lecturers: [John Doe]
+components:
+
+  unit/ros_fundamentals/lecture/ros_basic-tools: {
+    levels: [default, intermediate],
+    scenarios: [all],
+    lecturers: [Jane Doe]
+  }
+
+  unit/ros_fundamentals/tutorial/ros_basic_tools: {
+    levels: [default, intermediate],
+    scenarios: [all],
+    lecturers: [Jane Doe]
+  }
